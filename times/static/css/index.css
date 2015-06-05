@@ -48,8 +48,8 @@ header .banner {
   width: 100%;
 }
 .year {
-  border: solid 2px #66b5ce;
-  color: #66b5ce;
+  border: solid 2px #76b2d1;
+  color: #76b2d1;
   font-size: 2.4rem;
   text-align: center;
   transition: background-color 0.5s, color 0.5s;
@@ -61,7 +61,7 @@ header .banner {
 }
 .year.active,
 .year:hover {
-  background-color: #66b5ce;
+  background-color: #76b2d1;
   color: white;
 }
 .year-wrapper {
@@ -72,41 +72,40 @@ header .banner {
 }
 .block {
   position: relative;
-  margin: 8rem 2rem 0 0;
+  margin: 5rem 2rem 0 0;
 }
 .block .date {
   position: absolute;
-  border: solid 2px #66b5ce;
-  top: -4rem;
-  right: 4rem;
-  width: 10rem;
-  height: 10rem;
+  border: solid 2px #76b2d1;
+  top: -1rem;
+  right: 1rem;
+  width: 6rem;
+  height: 6rem;
   z-index: 5;
-  padding: 0.8rem;
-  color: #66b5ce;
+  padding: 8px 16px;
+  color: #76b2d1;
   background-color: white;
   transition: color 0.5s, background-color 0.5s;
 }
 .block .date .month {
   display: block;
   text-align: right;
-  font-size: 3.6rem;
-  line-height: 1.3em;
+  font-size: 2.4rem;
+  line-height: 1;
 }
 .block .date .day {
   display: block;
   text-align: right;
-  font-size: 2.2rem;
-  letter-spacing: 0.4rem;
+  font-size: 1.5rem;
 }
 .block .date.active {
-  background-color: #66b5ce;
+  background-color: #76b2d1;
   color: white;
 }
 .block .hover {
   position: absolute;
   transition: opacity 0.3s;
-  background-color: #2888a6;
+  background-color: #2d86b4;
   width: 100%;
   height: 100%;
   color: white;
@@ -137,8 +136,11 @@ header .banner {
   opacity: 0.8;
 }
 .block:hover .date {
-  background-color: #66b5ce;
+  background-color: #76b2d1;
   color: white;
+}
+.pages {
+  padding: 3rem 0;
 }
 .pages .page {
   width: 4rem;
@@ -147,14 +149,77 @@ header .banner {
   background-color: white;
   text-align: center;
   float: left;
-  font-size: 1.5em;
+  font-size: 1.3em;
   margin: 0 0.5em;
-  border: solid 2px #66b5ce;
+  border: solid 2px #76b2d1;
   transition: color 0.5s, background-color 0.5s;
-  color: #66b5ce;
+  color: #76b2d1;
 }
 .pages .page:hover,
 .pages .page.active {
-  background-color: #66b5ce;
+  background-color: #76b2d1;
   color: white;
+}
+footer {
+  background-color: #CCE5F2;
+  border-top: solid 4px #76B2D1;
+  height: 230px;
+  margin-top: 5rem;
+  padding: 40px 0;
+  color: black;
+}
+footer a {
+  color: white;
+  text-decoration: none;
+}
+footer .address a:nth-of-type(n+2)::before {
+  content: '|';
+  margin: 0 0.5em;
+}
+footer .contact {
+  float: right;
+  margin-right: 40px;
+}
+footer .grey {
+  color: #96bfd8;
+}
+footer .grey a {
+  color: #96bfd8;
+}
+footer .admin {
+  color: #4c92bc;
+}
+footer .qrcode {
+  position: relative;
+}
+footer .qrcode.book img {
+  right: 105px;
+}
+footer .qrcode img {
+  position: absolute;
+  display: block;
+  right: 30px;
+  bottom: 0;
+  width: 125px;
+  opacity: 0;
+  /*z-index: -1;*/
+}
+footer img:hover + .qrcode img {
+  display: block;
+  opacity: 1;
+  right: 65px;
+  -webkit-transition: all ease-in-out 0.5s;
+  -moz-transition: all ease-in-out 0.5s;
+  -ms-transition: all ease-in-out 0.5s;
+  -o-transition: all ease-in-out 0.5s;
+  transition: all ease-in-out 0.5s;
+}
+footer img:hover + .qrcode.book img {
+  right: 130px;
+}
+.section.input textarea {
+  height: 245px;
+}
+#activity_intro .modal-body {
+  text-indent: 2em;
 }

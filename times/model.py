@@ -1,8 +1,7 @@
-from peewee import Model, MySQLDatabase, PostgresqlDatabase, TextField, CharField, DateTimeField, IntegerField
+from peewee import Model, PostgresqlDatabase, TextField, CharField, DateTimeField, IntegerField
 from .config import DEBUG
 import json
 from .utils import *
-from datetime import datetime
 
 if DEBUG:
     from peewee import SqliteDatabase
@@ -12,9 +11,11 @@ else:
 
 
 class JsonField(TextField):
+
     """
-    A Simple helper to write the im-structed data like author
+    A Simple helper to write the unstructed data like author
     """
+
     def db_value(self, value):
         value = json.dumps(value)
         return super(JsonField, self).db_value(value)
@@ -25,6 +26,7 @@ class JsonField(TextField):
 
 
 class BaseModel(Model):
+
     class Meta:
         database = db
 
@@ -34,6 +36,7 @@ class BaseModel(Model):
             return cls.get(*args, **kwargs)
         except cls.DoesNotExist:
             return kwargs.get("default")
+
 
 class AdminUser(BaseModel):
 
@@ -48,6 +51,7 @@ class AdminUser(BaseModel):
     def check_pwd(self, password):
         return self.password == sha1sum(password + self.salt)
 
+
 class Post(BaseModel):
 
     title = CharField()
@@ -56,9 +60,10 @@ class Post(BaseModel):
     header = JsonField()
     author = JsonField()
     created = DateTimeField()
+    published = DateTimeField()
     other = JsonField()
     operation_history = JsonField()
-    status = CharField()
+    status = IntegerField()
 
 
 class Resource(BaseModel):

@@ -1,5 +1,5 @@
 from times import app
-from flask import render_template, send_from_directory, jsonify, request, g, session, abort
+from flask import render_template, jsonify, request, g, session, abort, send_file
 import jwt
 from . import model
 from functools import wraps
@@ -55,7 +55,7 @@ def login_status():
             session['Authentication'] = jwt.encode({"uid": user.uid, "exp": datetime.utcnow() + timedelta(days=1), "nbf": datetime.utcnow() - timedelta(mins=5)}, app.secret_key)
             return jsonify(err=0, msg="登陆成功")
 
-        return jsonify(err=1, msg="登录失败")
+        return jsonify(err=1, msg="错误的用户名和密码组合")
 
 
 @app.route("/admin/api/logout")
@@ -138,10 +138,11 @@ def upload_file():
             return jsonify(err=1, errmsg="There are some errors happened, plz contact the website manager")
 
 
+@app.route("/admin/", defaults={"path": None})
 @app.route("/admin/<path>")
-def admin_dashboard():
+def admin_dashboard(path):
     # Fallback Router for other
-    return send_from_directory("static/admin.html")
+    return send_file("static/admin.html")
 
 
 @app.route("/")

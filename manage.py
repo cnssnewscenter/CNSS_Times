@@ -19,5 +19,20 @@ def admin_create():
     print("Finish Created the user {}".format(username))
 
 
+@manager.command
+def reset_password():
+    username = input("Username: ")
+    new_passwd = getpass.getpass("New Password: ")
+    with model.db.transaction():
+        user = model.AdminUser.try_get(username=username)
+        if user:
+            user.set_pwd(new_passwd)
+            user.save()
+        else:
+            print("Can't find the user")
+            return
+
+    print("Finish reset password for {}".format(username))
+
 if __name__ == "__main__":
     manager.run()

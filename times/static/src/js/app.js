@@ -16,6 +16,13 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
         if(data.logined == false){
             console.log("You should login first")
             $state.go("login")
+        }else{
+            // check if we in the login page 
+            console.log($state.$current.url.source)
+            if($state.$current.url.source == '/login' || $state.$current.url.source == "/"){
+                // go to the dashboard
+                $state.go("dashboard")
+            }
         }
     })
 }]).config(['$stateProvider', "$locationProvider",function($stateProvider, $locationProvider) {
@@ -37,12 +44,16 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
                 }, 3000)
             })
         }]
+    }).state("dashboard", {
+        templateUrl: "/static/html/dashboard.html",
+        url: "/dashboard",
+        controller: "DashboardCtrl"
     })
-}]).controller('LoginController', ['Restangular', "$scope", function(Restangular, $scope){
+}]).controller('LoginController', ['Restangular', "$scope", "$state", function(Restangular, $scope, $state){
     $scope.login = function(){
         if($scope.password && $scope.username){
             Restangular.all("login").customPOST({password: $scope.password, username:$scope.username}).then(function(response){
-                if (response.err == 0 && response.logined == true){
+                if (response.err == 0){
                     console.log("You are logined!")
                     $state.go("dashboard")
                 }else{
@@ -55,4 +66,6 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
             })
         }
     }
+}]).controller('DashboardCtrl', ['$scope', function($scope){
+    
 }])

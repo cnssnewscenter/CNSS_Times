@@ -37,10 +37,13 @@ class BaseModel(Model):
         except cls.DoesNotExist:
             return kwargs.get("default")
 
+    def to_dict(self):
+        return self._data
+
 
 class AdminUser(BaseModel):
 
-    username = CharField()
+    username = CharField(unique=True)
     password = CharField()
     salt = CharField()
 
@@ -74,5 +77,11 @@ class Resource(BaseModel):
     path = CharField()
 
 
+class Hit(BaseModel):
+
+    item = CharField()
+    hit = IntegerField()
+
+
 def init_the_database(database):
-    database.create_tables([Resource, Post, AdminUser], safe=True)
+    database.create_tables([Resource, Post, AdminUser, Hit], safe=True)

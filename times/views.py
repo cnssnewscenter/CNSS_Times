@@ -1,6 +1,5 @@
 from times import app
 from flask import render_template, jsonify, request, g, session, abort, send_file
-import jwt
 from . import model
 from functools import wraps
 from datetime import datetime, timedelta
@@ -8,22 +7,21 @@ import json
 import os
 
 
+PAGEVIEW_CACHE = 0
+LAST_UPDATE = datetime.now()
+
+
 @app.before_request
 def init_the_user():
+    session.modified = True
+    session.permanent = True
     if request.path.startswith("/admin/api"):
-        token = session.get("Authentication")
-        if token:
-            try:
-                info = jwt.decode("token", app.secret_key)
-                user = model.User.try_get(id=info.get("uid"))
-                if user:
-                    g.user = user
-                    g.logined = True
-                    return
-                g.logined = False
-                return
-            except jwt.InvalidTokenError:
-                g.logined = False
+        username = session.get("username")
+        if username:
+            user = model.AdminUser.try_get(username=username)
+            if user:
+                g.user = user
+                g.logined = True
                 return
     g.logined = False
     return
@@ -48,11 +46,14 @@ def login_status():
         else:
             return jsonify(err=1, logined=False)
     elif request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+        form = request.get_json()
+        username = form.get("username")
+        password = form.get("password")
         user = model.AdminUser.try_get(username=username)
+        print(username, password)
         if user and user.check_pwd(password):
-            session['Authentication'] = jwt.encode({"uid": user.uid, "exp": datetime.utcnow() + timedelta(days=1), "nbf": datetime.utcnow() - timedelta(mins=5)}, app.secret_key)
+            session['username'] = username
+            session.modified = True
             return jsonify(err=0, msg="登陆成功")
 
         return jsonify(err=1, msg="错误的用户名和密码组合")
@@ -60,7 +61,7 @@ def login_status():
 
 @app.route("/admin/api/logout")
 def logout():
-    session['Authentication'] = None
+    session.pop("username")
     return jsonify(err=0, msg="Token cleaned")
 
 
@@ -145,6 +146,23 @@ def admin_dashboard(path):
     return send_file("static/admin.html")
 
 
+@app.route("/admin/api/stats")
+def stats():
+    code = request.args.get("id")
+    if code:
+        hit = model.Hit.try_get(item=code)
+        return jsonify(err=0, hit=hit.hit)
+    else:
+        datas = {i.item: i.hit for i in model.Hit.select()}
+        return jsonify(err=0, hits=datas)
+
+
 @app.route("/")
 def show_index():
+    global PAGEVIEW_CACHE
+    PAGEVIEW_CACHE += 1
+    # 每10分钟存储访问量的数据
+    if datetime.now() - LAST_UPDATE > timedelta(minutes=10):
+        model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.item == "index")
+        PAGEVIEW_CACHE = 0
     return render_template("index.html")

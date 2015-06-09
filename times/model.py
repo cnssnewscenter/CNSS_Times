@@ -79,7 +79,7 @@ class Resource(BaseModel):
 
 class Hit(BaseModel):
 
-    item = CharField()
+    page = CharField(unique=True)
     hit = IntegerField()
 
 

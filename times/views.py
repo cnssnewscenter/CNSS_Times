@@ -11,6 +11,14 @@ PAGEVIEW_CACHE = 0
 LAST_UPDATE = datetime.now()
 
 
+def get_page_hit(page):
+    page_ = model.Hit.try_get(page=page)
+    if page_:
+        return page_.hit
+    else:
+        model.Hit.create(page=page, hit=0)
+        return 0
+
 @app.before_request
 def init_the_user():
     session.modified = True
@@ -50,7 +58,6 @@ def login_status():
         username = form.get("username")
         password = form.get("password")
         user = model.AdminUser.try_get(username=username)
-        print(username, password)
         if user and user.check_pwd(password):
             session['username'] = username
             session.modified = True
@@ -150,10 +157,10 @@ def admin_dashboard(path):
 def stats():
     code = request.args.get("id")
     if code:
-        hit = model.Hit.try_get(item=code)
+        hit = model.Hit.try_get(page=code)
         return jsonify(err=0, hit=hit.hit)
     else:
-        datas = {i.item: i.hit for i in model.Hit.select()}
+        datas = {i.page: i.hit for i in model.Hit.select()}
         return jsonify(err=0, hits=datas)
 
 
@@ -163,6 +170,6 @@ def show_index():
     PAGEVIEW_CACHE += 1
     # 每10分钟存储访问量的数据
     if datetime.now() - LAST_UPDATE > timedelta(minutes=10):
-        model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.item == "index")
+        model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.page == "index")
         PAGEVIEW_CACHE = 0
-    return render_template("index.html")
+    return render_template("index.html", hit=get_page_hit("index") + PAGEVIEW_CACHE)

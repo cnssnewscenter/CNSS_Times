@@ -2,10 +2,14 @@
     <ul class="small-4 large-2 columns side-nav main-side">
         <li class="header small-text-center">成电时光</li>
         <li><a href="">仪表盘</a></li>
+        <li><a sref="">文章列表</a></li>
     </ul>
-    <div class="small-8 large-10 columns content">
+    <div class="small-8 large-10 columns main">
         <div class="actions">
-                <a class="right tiny button round">退出</a>
+                <a ui-sref="logout" class="right tiny button round">退出</a>
+        </div>
+        <div class="content" ui-view>
+            
         </div>
     </div>
 </div>

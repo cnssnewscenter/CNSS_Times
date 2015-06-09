@@ -34,20 +34,15 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
     }).state("logout", {
         template: "{{status}}",
         url: "/logout",
-        controller: ['Restangular' , '$scope', '$timeout', function(Restangular, $scope, $timeout){
-            console.log("Now quiting")
-            $scope.status = '正在退出登录'
-            Restangular.customGET("logout").then(function(){
-                $scope.status = '登出成功，即将回到首页'
-                $timeout(function(){
-                    window.location.href = '/';
-                }, 3000)
-            })
-        }]
-    }).state("dashboard", {
+        controller: "LogoutController"
+    }).state("main", {
         templateUrl: "/static/html/dashboard.html",
         url: "/dashboard",
         controller: "DashboardCtrl"
+    }).state("main.passages", {
+        templateUrl: "/static/html/passages.html",
+        url: "/passages",
+        controller: "PassagesController"
     })
 }]).controller('LoginController', ['Restangular', "$scope", "$state", function(Restangular, $scope, $state){
     $scope.login = function(){
@@ -68,4 +63,17 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
     }
 }]).controller('DashboardCtrl', ['$scope', function($scope){
     
+}]).controller('LogoutController', ['Restangular' , '$scope', '$timeout', function(Restangular, $scope, $timeout){
+    console.log("Now quiting")
+    $scope.status = '正在退出登录'
+    Restangular.all("logout").customGET().then(function(){
+        $scope.status = '登出成功，即将回到首页'
+        $timeout(function(){
+            window.location.href = '/';
+        }, 3000)
+    })
+}]).controller('PassagesController', ['Restangular', "$scope", function(Restangular, $scope){
+    Restangular.all("passage").getList().then(function(){
+        console.log(arguments)
+    })
 }])

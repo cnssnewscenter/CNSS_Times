@@ -21,7 +21,7 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
             console.log($state.$current.url.source)
             if($state.$current.url.source == '/login' || $state.$current.url.source == "/"){
                 // go to the dashboard
-                $state.go("dashboard")
+                $state.go("main")
             }
         }
     })
@@ -29,18 +29,18 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
     $locationProvider.html5Mode(true)
     $stateProvider.state("login", {
         url: "/login",
-        templateUrl: "/static/html/login.html",
+        templateUrl: "/static/src/html/login.html",
         controller: "LoginController",
     }).state("logout", {
         template: "{{status}}",
         url: "/logout",
         controller: "LogoutController"
     }).state("main", {
-        templateUrl: "/static/html/dashboard.html",
+        templateUrl: "/static/src/html/dashboard.html",
         url: "/dashboard",
         controller: "DashboardCtrl"
     }).state("main.passages", {
-        templateUrl: "/static/html/passages.html",
+        templateUrl: "/static/src/html/passages.html",
         url: "/passages",
         controller: "PassagesController"
     })
@@ -50,7 +50,7 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
             Restangular.all("login").customPOST({password: $scope.password, username:$scope.username}).then(function(response){
                 if (response.err == 0){
                     console.log("You are logined!")
-                    $state.go("dashboard")
+                    $state.go("main")
                 }else{
                     console.log("Login Failed")
                     $scope.err_msg = "登录失败：" + response.msg

@@ -17,6 +17,7 @@
     "ui-router": "~0.2.15",
     "restangular": "~1.5.1",
     "angular-foundation": "~0.6.0",
-    "foundation": "~5.5.2"
+    "froala": "~1.2.7",
+    "angular-chart": "~0.3.0"
   }
 }

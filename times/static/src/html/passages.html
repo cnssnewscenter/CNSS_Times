@@ -1,5 +1,27 @@
 <div>
-    <ul>
-        <li ng-repeat="post in passages">{{post.name}}</li>
-    </ul>
+	<div class="btn-group">
+		<div class="btn btn-green" ng-click="newPassage()">新建</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<td>序号</td>
+				<td>来源</td>
+				<td>标题</td>
+				<td>题头图</td>
+				<td>日期</td>
+				<td>操作</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="p in passages">
+				<td>{{p.id}}</td>
+				<td>{{p.author.author}}</td>
+				<td>{{p.title}}</td>
+				<td><img ng-src="/f/{{p.head}}"></td>
+				<td><time am-time-ago="p.created"></time></td>
+				<td>发布，撤回</td>
+			</tr>
+		</tbody>
+	</table>
 </div>

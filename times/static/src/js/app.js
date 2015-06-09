@@ -1,4 +1,4 @@
-angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Restangular', "$state",function(Restangular, $state){
+angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMoment']).run(['Restangular', "$state",function(Restangular, $state){
     // config the Restangular baseurl
     Restangular.setBaseUrl("/admin/api")
     Restangular.setErrorInterceptor(function(repsonse, defered, responseHandler){
@@ -36,13 +36,18 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
         url: "/logout",
         controller: "LogoutController"
     }).state("main", {
-        templateUrl: "/static/src/html/dashboard.html",
-        url: "/dashboard",
-        controller: "DashboardCtrl"
+        templateUrl: "/static/src/html/framework.html",
+    }).state("main.dashboard", {
+        template:"测试",
+        url: "/dashboard"
     }).state("main.passages", {
         templateUrl: "/static/src/html/passages.html",
         url: "/passages",
         controller: "PassagesController"
+    }).state("main.new_passages", {
+        templateUrl: "/static/src/html/new_passages.html",
+        url: "/new_passages",
+        controller: "NewPassageController",
     })
 }]).controller('LoginController', ['Restangular', "$scope", "$state", function(Restangular, $scope, $state){
     $scope.login = function(){
@@ -76,4 +81,6 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation']).run(['Res
     Restangular.all("passage").getList().then(function(){
         console.log(arguments)
     })
+}]).controller('NewPassageController', ['Restangular', "$scope", function(){
+    
 }])

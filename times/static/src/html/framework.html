@@ -1,4 +1,4 @@
-<div class="">
+<div class="framework">
     <ul class="col-sm-4 col-md-3 col-lg-2 nav nav-bar nav-pills nav-stacked main-side">
         <li class="header text-center">成电时光</li>
         <li><a ui-sref="main.dashboard">仪表盘</a></li>
@@ -7,7 +7,11 @@
     </ul>
     <div class="col-sm-8 col-md-9 col-lg-10 main">
         <div class="actions">
-                <a ui-sref="logout" class="btn btn-danger btn">退出</a>
+            <div class="btn btn-default pull-left"><i class="glyphicon glyphicon-menu-left"></i></div>
+            <h3 class="pull-left">{{title}}</h3>
+            <div class="btn-group pull-right">
+                <a ui-sref="logout" class="btn btn-danger ">退出</a>                
+            </div>
         </div>
         <div class="content" ui-view>
           

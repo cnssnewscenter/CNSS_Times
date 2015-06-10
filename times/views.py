@@ -79,7 +79,7 @@ def posts(pid):
     if pid is None:
         if request.method == "GET":
             page = int(request.args.get("page", 1))
-            return jsonify(err=0, posts=[i for i in model.Post.select().paginate(page, 10)])
+            return jsonify(err=0, data=[i for i in model.Post.select().paginate(page, 10)])
         elif request.method == "PUT":
             now = datetime.now()
             model.Post.create(

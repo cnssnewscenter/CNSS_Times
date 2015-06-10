@@ -17,6 +17,8 @@
         color: white;
         a{
             margin: 5px 0px 5px 5px;
+            font-size: 1.25em;
+            color: lighten(@menuback, 10%)
         }
         a:hover, a:focus, a.active{
             color: white;
@@ -32,5 +34,59 @@
     height: 10rem;
     background-color: white;
     width: 100%;
-    padding: 0.75rem 1.4rem;
+    h3{
+        height: 10rem;
+        line-height: 10rem;
+        margin: 0;
+        font-weight: 100;
+    }
+    .btn-group{
+        margin: 3.2rem 3em;        
+    }
+    div.pull-left{
+        margin: 3.2rem 1em 3.2rem 3em;
+    }
 }
+body{
+    background-color: #EEE;
+}
+.content > .container{
+    margin-left: 1em;
+    margin-top: 1em;
+}
+.big_item{
+    display: flex;
+    
+    border-radius: 10px;
+    padding: 2rem;
+    color: white;
+    a{
+        color: white;
+        &:focus, &:visited, &:active, &:hover, &.active{
+            color: white;
+            text-decoration: none;
+        }
+    }
+    .left{
+        flex: 1;
+        .h1{
+            font-size: 6em;
+            font-weight: 100;
+        }
+    }
+    
+    ul.right{
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li{
+            flex: 1;
+            font-size: 1.2em;
+            margin: auto;
+            padding: 0;
+        }
+    }
+}
+

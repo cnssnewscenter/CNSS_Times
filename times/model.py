@@ -1,4 +1,4 @@
-from peewee import Model, PostgresqlDatabase, TextField, CharField, DateTimeField, IntegerField
+from peewee import Model, PostgresqlDatabase, TextField, CharField, DateTimeField, IntegerField, BooleanField
 from .config import DEBUG
 import json
 from .utils import *
@@ -67,6 +67,7 @@ class Post(BaseModel):
     other = JsonField()
     operation_history = JsonField()
     status = IntegerField()
+    deleted = BooleanField(default=False)
 
 
 class Resource(BaseModel):

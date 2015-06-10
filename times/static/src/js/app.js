@@ -23,11 +23,10 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMo
             $state.go("login")
         }else{
             // check if we in the login page 
-            console.log($state.$current.url)
-            // if($state.$current.url.source == '/login' || $state.$current.url.source == ""){
-            //     // go to the dashboard
-            //     $state.go("main.dashboard")
-            // }
+            if(window.location.pathname == '/admin/login' || window.location.pathname == "/admin/"){
+                // go to the dashboard
+                $state.go("main.dashboard")
+            }
         }
     })
 }]).config(['$stateProvider', "$locationProvider",function($stateProvider, $locationProvider) {
@@ -59,6 +58,10 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMo
         templateUrl: "/static/src/html/new_passages.html",
         url: "/new_passages",
         controller: "NewPassageController",
+    }).state('main.resource', {
+        templateUrl: "/static/src/html/resource.html",
+        url: "/resource",
+        controller: "ResourceController"
     })
 }]).controller('LoginController', ['Restangular', "$scope", "$state", function(Restangular, $scope, $state){
     $scope.login = function(){
@@ -77,16 +80,22 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMo
             })
         }
     }
-}]).controller('DashboardController', ['$scope', function($scope){
+}]).controller('DashboardController', ['$scope', "Restangular",function($scope, Restangular){
     $scope.setTitle("仪表盘")
+    Restangular.all('index_stats').customGET().then(function(response){
+        if(!response.err){
+            $scope.stats = response.posts
+        }
+    })
+
 }]).controller('LogoutController', ['Restangular' , '$scope', '$timeout', function(Restangular, $scope, $timeout){
-    console.log("Now quiting")
+    $scope.setTitle('退出登录')
     $scope.status = '正在退出登录'
     Restangular.all("logout").customGET().then(function(){
         $scope.status = '登出成功，即将回到首页'
         $timeout(function(){
             window.location.href = '/';
-        }, 3000)
+        }, 1000)
     })
 }]).controller('PassagesController', ['Restangular', "$scope", function(Restangular, $scope){
     $scope.setTitle("文章列表")
@@ -110,4 +119,38 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMo
     $scope.delete = function(item){
         $scope.author.splice($scope.author.indexOf(item), 1)
     }
-}])
+    $scope.save = function(){
+        Restangular.all('post').customPUT({
+            title: $scope.title,
+            author: $scope.author,
+            header: $scope.header
+
+        }).then(function(response){
+            // should redirect to the single post page
+            console.log(response)
+        })
+    }
+}]).controller('ResourceController', ['$scope', "Restangular",function($scope, Restangular){
+    $scope.setTitle("资源管理")
+    $scope.Upload = function(){
+        console.log($scope.file)
+    }
+    $scope.cb = function(){
+        console.log(arguments)
+    }
+    
+}]).directive('uploader', ['Restangular', function(Restangular){
+    return {
+        scope: {"callback": "@"},
+        // priority: 1,
+        // controller: function($scope, $element, $attrs, $transclude) {},
+        // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+        // restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
+        template: '<input type="file" ng-change="changed($event)"><div class="btn btn-success" ng-click="Upload()">上传</div>',
+        link: function($scope, iElm, iAttrs, controller) {
+            $scope.changed = function(event){
+                console.log(event)
+            }
+        }
+    };
+}]);

@@ -90,3 +90,14 @@ body {
   margin: auto;
   padding: 0;
 }
+uploader {
+  position: relative;
+}
+uploader input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+}

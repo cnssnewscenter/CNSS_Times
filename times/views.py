@@ -165,6 +165,17 @@ def stats():
         return jsonify(err=0, hits=datas)
 
 
+@app.route('/admin/api/index_stats')
+def index_stats():
+    posts = {
+        "all": model.Post.select().where(model.Post.deleted == False).count(),
+        "toView": model.Post.select().where(model.Post.deleted == False & model.Post.status == 'toView').count(),
+        "toPublish": model.Post.select().where(model.Post.deleted == False & model.Post.status == 'toPublish').count(),
+        "published": model.Post.select().where(model.Post.deleted == False & model.Post.status == "published").count()
+    }
+    return jsonify(err=0, posts=posts)
+
+
 @app.route("/")
 def show_index():
     global PAGEVIEW_CACHE

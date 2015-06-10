@@ -19,6 +19,7 @@ def get_page_hit(page):
         model.Hit.create(page=page, hit=0)
         return 0
 
+
 @app.before_request
 def init_the_user():
     session.modified = True

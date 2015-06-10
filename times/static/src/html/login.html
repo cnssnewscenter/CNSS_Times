@@ -1,42 +1,45 @@
 <style>
-    body {
+    .wrapper {
       background: #F0F0F3;
+      height: 100%;
+      display: flex;
+    }
+    body, html{
+        height: 100%;
     }
     .login-box {
-      background: #fff;
-      border: 1px solid #ddd; 
-      margin: 100px 0;
-      padding: 40px 20px 0 20px;
+        background: #fff;
+        border: 1px solid #ddd; 
+        padding: 40px 20px 0 20px;
+        margin: auto
     }
 </style>
-<div class="large-3 large-centered columns">
-    <div class="login-box">
-        <div class="row">
-            <div class="large-12 columns">
-                <form>
-                    <div class="row">
-                        <div class="large-12 columns">
-                            <input type="text" ng-model="username" name="username" placeholder="用户名" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-12 columns">
-                            <input type="password" ng-model="password" name="password" placeholder="密码" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-12 large-centered columns">
-                            <input type="submit" class="button expand" ng-click="login()" value="登录"/>
-                            <small class="error" ng-show="err_msg">{{err_msg}}</small>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="large-12 small-text-center columns text-center">
-                            <small>Powered by CNSS(凝聚网络安全工作室).</small>
-                        </div>
-                    </div>
-                </form>
+<div class="wrapper">
+    <div class="login-box col-sm-6 col-md-4 col-lg-3">
+        <form>
+            <h1 class="text-center">Login</h1>
+            <div class="form-group">
+                <div class="large-12 columns">
+                    <input class="form-control" type="text" ng-model="username" name="username" placeholder="用户名" />
+                </div>
             </div>
-        </div>
+            <div class="form-group">
+                <div class="large-12 columns">
+                    <input class="form-control" type="password" ng-model="password" name="password" placeholder="密码" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="large-12 large-centered columns">
+                    <input type="submit" class="btn btn-block btn-primary" ng-click="login()" value="登录"/>
+                    <small class="error" ng-show="err_msg">{{err_msg}}</small>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 text-center">
+                    <small>Powered by CNSS(凝聚网络安全工作室).</small>
+                </div>
+            </div>
+        </form>
+
     </div>
 </div>

@@ -1,14 +1,25 @@
-<div class="container">
-	<div class="col-sm-12">
-		<div class="big_item" style="background: linear-gradient(135deg, #00BFB6, #14D685);">
-			<div class="left">
-				<a ui-sref="main.passages"><span class="h1">{{stats.all}}</span> 篇文章</a>
+<div class="container dashboard">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="big_item" style="background: linear-gradient(135deg, #00BFB6, #14D685);">
+				<div class="left">
+					<a ui-sref="main.passages"><span class="h1">{{data.posts.all}}</span> 篇文章</a>
+				</div>
+				<ul class="right">
+					<li><a ui-sref="main.passages">待审阅: {{data.posts.toView}}</a></li>
+					<li><a ui-sref="main.passages">待发布: {{data.posts.toPublish}}</a></li>
+					<li><a ui-sref="main.passages">已发布: {{data.posts.published}}</a></li>
+				</ul>
 			</div>
-			<ul class="right">
-				<li><a ui-sref="main.passages">待审阅: {{stats.toView}}</a></li>
-				<li><a ui-sref="main.passages">待发布: {{stats.toPublish}}</a></li>
-				<li><a ui-sref="main.passages">已发布: {{stats.published}}</a></li>
-			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="big_item" style="background: linear-gradient(135deg, #FF3A3A, #FFC623)">
+				<div class="left">
+					<a ui-sref="main.resources"><span class="h1">{{data.resource}}</span> 个图片资源</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

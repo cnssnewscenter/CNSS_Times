@@ -189,7 +189,7 @@ def index_stats():
         "toPublish": model.Post.select().where(model.Post.deleted == False & model.Post.status == 'toPublish').count(),
         "published": model.Post.select().where(model.Post.deleted == False & model.Post.status == "published").count()
     }
-    return jsonify(err=0, posts=posts)
+    return jsonify(err=0, posts=posts, resource=model.Resource.select().count())
 
 
 @app.route('/upload/<path:path>')

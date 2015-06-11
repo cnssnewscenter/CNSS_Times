@@ -122,3 +122,6 @@ body {
   border-radius: 5px;
   border: solid #ddd 1px;
 }
+.dashboard .row {
+  margin: 1em 0;
+}

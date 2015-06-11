@@ -83,7 +83,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.setTitle("仪表盘")
     Restangular.all('index_stats').customGET().then(function(response){
         if(!response.err){
-            $scope.stats = response.posts
+            $scope.data = response
         }
     })
 }]).controller('LogoutController', ['Restangular' , '$scope', '$timeout', function(Restangular, $scope, $timeout){

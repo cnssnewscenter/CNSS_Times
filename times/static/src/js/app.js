@@ -1,4 +1,4 @@
-angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid']).run(['Restangular', "$state",function(Restangular, $state){
+angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid', "ngToast", 'ui.bootstrap']).run(['Restangular', "$state",function(Restangular, $state){
     // config the Restangular baseurl
     Restangular.setBaseUrl("/admin/api")
     Restangular.setErrorInterceptor(function(repsonse, defered, responseHandler){
@@ -13,8 +13,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             if (!data.err){
                 return data.data
             }
-        }
-
+        } 
         return data
     })
     Restangular.all("login").customGET().then(function(data){
@@ -87,7 +86,6 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             $scope.stats = response.posts
         }
     })
-
 }]).controller('LogoutController', ['Restangular' , '$scope', '$timeout', function(Restangular, $scope, $timeout){
     $scope.setTitle('退出登录')
     $scope.status = '正在退出登录'
@@ -102,7 +100,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     Restangular.all("post").getList().then(function(response){
         $scope.passages = response
     })
-}]).controller('NewPassageController', ['Restangular', "$scope", function(Restangular, $scope){
+}]).controller('NewPassageController', ['Restangular', "$scope", '$modal',function(Restangular, $scope, $modal){
     $scope.setTitle("新建文章")
     $scope.froalaOptions = {
         inlineMode: false,
@@ -130,6 +128,16 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             console.log(response)
         })
     }
+    $scope.upload = function(){
+        console.log("Test")
+        $modal.open({
+            animation: true,
+            templateUrl: "/static/src/html/selector.html",
+            controller: "SelectorController",
+        }).result.then(function(urls){
+            $scope.header = urls[0]
+        })
+    }
 }]).controller('ResourceController', ['$scope', "Restangular", "FileUploader", function($scope, Restangular, FileUploader){
     $scope.setTitle("资源管理")
     $scope.page = 1
@@ -141,12 +149,6 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.uploader.onSuccessItem = function(){
         $scope.get(1);
     }
-    $scope.Upload = function(){
-        console.log($scope.file)
-    }
-    $scope.cb = function(){
-        console.log(arguments)
-    }
     $scope.get = function(page){
         if(page > 0){
             Restangular.all('uploaded').getList({page:page}).then(function(response){
@@ -157,5 +159,25 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     }
     $scope.get(1)
 
-    
+}]).controller('SelectorController', ['$scope', "FileUploader", "$modalInstance", function($scope, FileUploader, $modalInstance){
+    $scope.uploader = new FileUploader({
+        url: "/admin/upload",
+        autoUpload: true
+    })
+    $scope.finished = []
+    $scope.ok = function(){
+        $modalInstance.close($scope.finished);
+    }
+    $scope.uploader.onSuccessItem = function(item, response){
+        if(!response.err){
+            $scope.finished.push("/"+response.path)
+        }
+    }
+}]).factory('UploaderSelector', ['FileUploader', "",function(FileUploader){
+    var uploader = {};
+    uploader.upload = function(callback){
+        // the callback will receive a list of images selected or uploaded
+
+    }
+    return uploader;
 }])

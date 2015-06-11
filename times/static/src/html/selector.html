@@ -1,0 +1,33 @@
+<div class="model-header">
+	<h1>选择图片</h1>
+</div>
+<div class="model-body">
+	<tabset justified="true">
+		<tab heading="上传图片">
+			<div class="container-fluid">
+				<div class="alert alert-default">选择要上传的内容</div>
+				<div class="col-sm-12" style="">
+					<div class="well container-fluid">
+						<div class="col-sm-4" ng-repeat="file in finished">
+							<img ng-src="{{file}}" alt="" class="img-responsive img-thumbnail">
+						</div>
+					</div>
+				</div>
+                <div>
+                	选择文件（可以多选）,选择完成后自动上传：<input type="file" nv-file-select="" uploader="uploader" multiple /><br/>
+
+                	<div class="progress" style="">
+                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }">
+                        	{{finished.length}} / {{uploader.queue.length}}
+                        </div>
+                    </div>
+                    
+                </div>
+			</div>
+		</tab>
+	</tabset>
+
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">确认</button>
+</div>

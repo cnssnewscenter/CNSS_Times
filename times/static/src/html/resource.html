@@ -1,10 +1,10 @@
 <div class="container">
 	<div class="col-sm-12">
-        <div class="panel panel-{{uploading_status}}">
-            <div class="panel-heading">
-                上传文件 {{uploading_status_text}}
+        <div class="panel panel-default">
+            <div class="panel-heading" ng-click="show_board =!show_board">
+                上传文件
             </div>
-            <div class="panel-content">
+            <div class="panel-content" ng-show="show_board">
                 <table class="table">
                     <thead>
                         <tr>
@@ -15,18 +15,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="file in files">
-                            <td></td>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td>
+                                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                            	{{item.file.name}}
+                            </td>
+                            <td>{{item.file.size/1024|number:2}}KB</td>
+                            <td>
+                            	<div class="progress" style="margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td nowrap>
+                                    <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove
+                                    </button>
+                                </td>
                         </tr>
                     </tbody>
                 </table>
                 <div>
-                    选择文件（可以多选）：<input type="file" nv-file-select="" uploader="uploader" multiple  /><br/>
+                	选择文件（可以多选）：<input type="file" nv-file-select="" uploader="uploader" multiple  /><br/>
+
+                	<div class="progress" style="">
+                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                    </div>
+                    
                 </div>
             </div>
         </div>                
     </div>
     <div class="col-sm-12">	
-    
+    	<!-- 使用瀑布流 -->
+    	<div deckgrid source="resource" cardTemplate="/static/src/html/card.html" class="deckgrid"></div>
 	</div>
 </div>

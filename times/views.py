@@ -1,5 +1,5 @@
 from times import app
-from flask import render_template, jsonify, request, g, session, abort, send_file
+from flask import render_template, jsonify, request, g, session, abort, send_file, send_from_directory
 from . import model
 from functools import wraps
 from datetime import datetime, timedelta
@@ -124,29 +124,43 @@ def gen_file_name(filename):
     return "{0:%Y}/{0:%m}/{0:%s}-{0:%f}{1}".format(datetime.now(), os.path.splitext(filename)[-1])
 
 
-@app.route("/admin/upload", methods=["GET", "POST"])
+@app.route("/admin/upload", methods=["POST"])
 def upload_file():
+    try:
+        with model.db.transaction():
+            filename = request.form.get("filename", "") or list(request.files.values())[0].filename
+            saved = gen_file_name(filename)
+            final_path = os.path.join(app.config.get("UPLOAD", ""), saved)
+            os.makedirs(os.path.split(final_path)[0], exist_ok=True)
+            request.files["file"].save(final_path)
+            model.Resource.create(
+                filename=filename,
+                created=datetime.now(),
+                size=os.stat(os.path.join(app.config.get("UPLOAD"), saved)).st_size,
+                path=saved
+            )
+            return jsonify(err=0, path=os.path.join("upload", saved))
+    except Exception as e:
+        app.logger.error("when uploading at {}".format(datetime.now()), exc_info=e)
+        return jsonify(err=1, errmsg="There are some errors happened, plz contact the website manager")
+
+
+@app.route('/admin/api/uploaded', methods=["GET"])
+def uploaded_file():
     if request.method == "GET":
         page = request.args.get("page", 1)
-        return jsonify(err=0, data=model.Resource.select().paginate(page, 30))
-    elif request.method == "POST":
-        try:
-            with model.db.transaction():
-                filename = request.form.get("filename", "") or list(request.files.values())[0].filename
-                saved = gen_file_name(filename)
-                final_path = os.path.join(app.config.get("UPLOAD", ""), saved)
-                os.makedirs(os.path.split(final_path)[0], exist_ok=True)
-                request.files["file"].save(final_path)
-                model.Resource.create(
-                    filename=filename,
-                    created=datetime.now(),
-                    size=os.stat(os.path.join(app.config.get("UPLOAD"), saved)).st_size,
-                    path=saved
-                )
-                return jsonify(err=0, path=os.path.join("upload", saved))
-        except Exception as e:
-            app.logger.error("when uploading at {}".format(datetime.now()), exc_info=e)
-            return jsonify(err=1, errmsg="There are some errors happened, plz contact the website manager")
+        keyword = request.args.get('key', None)
+        if keyword:
+            if " " in keyword:
+                keyword = keyword.split()
+                ret = []
+                for i in keyword:
+                    ret.extend([i.to_dict() for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)])
+            else:
+                ret = [i.to_dict() for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)]
+            return jsonify(err=0, data=ret)
+        else:
+            return jsonify(err=0, data=[i.to_dict() for i in model.Resource.select().paginate(page, 30)])
 
 
 @app.route("/admin/", defaults={"path": None})
@@ -176,6 +190,12 @@ def index_stats():
         "published": model.Post.select().where(model.Post.deleted == False & model.Post.status == "published").count()
     }
     return jsonify(err=0, posts=posts)
+
+
+@app.route('/upload/<path:path>')
+def upload_static_file(path):
+    print(app.config['UPLOAD'])
+    return send_from_directory(app.config['UPLOAD'], path)
 
 
 @app.route("/")

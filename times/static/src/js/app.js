@@ -1,4 +1,4 @@
-angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMoment', 'froala', 'ngFileUpload']).run(['Restangular', "$state",function(Restangular, $state){
+angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid']).run(['Restangular', "$state",function(Restangular, $state){
     // config the Restangular baseurl
     Restangular.setBaseUrl("/admin/api")
     Restangular.setErrorInterceptor(function(repsonse, defered, responseHandler){
@@ -130,13 +130,28 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMo
             console.log(response)
         })
     }
-}]).controller('ResourceController', ['$scope', "Restangular",function($scope, Restangular){
+}]).controller('ResourceController', ['$scope', "Restangular", "FileUploader", function($scope, Restangular, FileUploader){
     $scope.setTitle("资源管理")
+    $scope.uploader = new FileUploader({
+        url: "/admin/upload",
+        autoUpload: true,
+        removeAfterUpload: true,
+    })
+    $scope.uploader.onSuccessItem = function(){
+        $scope.get(1);
+    }
     $scope.Upload = function(){
         console.log($scope.file)
     }
     $scope.cb = function(){
         console.log(arguments)
     }
+    $scope.get = function(page){
+        Restangular.all('uploaded').getList().then(function(response){
+            $scope.resource = response
+        })
+    }
+    $scope.get(1)
+
     
 }])

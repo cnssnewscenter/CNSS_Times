@@ -148,7 +148,7 @@ def upload_file():
 @app.route('/admin/api/uploaded', methods=["GET"])
 def uploaded_file():
     if request.method == "GET":
-        page = request.args.get("page", 1)
+        page = int(request.args.get("page", 1))
         keyword = request.args.get('key', None)
         if keyword:
             if " " in keyword:

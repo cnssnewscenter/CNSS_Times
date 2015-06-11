@@ -1,9 +1,19 @@
+body,
+html {
+  height: 100%;
+  width: 100%;
+}
+.framework {
+  margin: 0;
+  padding: 0;
+  background-color: #293541;
+  min-height: 100vh;
+}
 .main-side {
   background-color: #293541;
   color: white;
   padding: 0;
   height: 100%;
-  height: 100vh;
 }
 .main-side .header {
   margin: 0;
@@ -28,6 +38,8 @@
 }
 .main {
   padding: 0;
+  background-color: #EEE;
+  min-height: 100vh;
 }
 .actions {
   height: 10rem;
@@ -108,5 +120,5 @@ body {
   background-color: white;
   margin: 1rem;
   border-radius: 5px;
-  border: solid grey 1px;
+  border: solid #ddd 1px;
 }

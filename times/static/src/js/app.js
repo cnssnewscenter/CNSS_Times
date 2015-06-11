@@ -132,6 +132,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     }
 }]).controller('ResourceController', ['$scope', "Restangular", "FileUploader", function($scope, Restangular, FileUploader){
     $scope.setTitle("资源管理")
+    $scope.page = 1
     $scope.uploader = new FileUploader({
         url: "/admin/upload",
         autoUpload: true,
@@ -147,9 +148,12 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         console.log(arguments)
     }
     $scope.get = function(page){
-        Restangular.all('uploaded').getList().then(function(response){
-            $scope.resource = response
-        })
+        if(page > 0){
+            Restangular.all('uploaded').getList({page:page}).then(function(response){
+                $scope.page = page
+                $scope.resource = response
+            })
+        }
     }
     $scope.get(1)
 

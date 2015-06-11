@@ -134,10 +134,12 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             animation: true,
             templateUrl: "/static/src/html/selector.html",
             controller: "SelectorController",
+            size: "lg"
         }).result.then(function(urls){
             $scope.header = urls[0]
         })
     }
+   
 }]).controller('ResourceController', ['$scope', "Restangular", "FileUploader", function($scope, Restangular, FileUploader){
     $scope.setTitle("资源管理")
     $scope.page = 1
@@ -159,7 +161,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     }
     $scope.get(1)
 
-}]).controller('SelectorController', ['$scope', "FileUploader", "$modalInstance", function($scope, FileUploader, $modalInstance){
+}]).controller('SelectorController', ['$scope', "FileUploader", "$modalInstance", 'Restangular',function($scope, FileUploader, $modalInstance, Restangular){
     $scope.uploader = new FileUploader({
         url: "/admin/upload",
         autoUpload: true
@@ -171,6 +173,29 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.uploader.onSuccessItem = function(item, response){
         if(!response.err){
             $scope.finished.push("/"+response.path)
+        }
+    }
+    $scope.page = 1
+    $scope.fillData = function(page, keyword){
+        console.log(keyword)
+        if (!page)
+            page = $scope.page
+        Restangular.all('uploaded').getList({page: page, key: keyword}).then(function(response){
+            $scope.pics = response.map(function(data){
+                data.path = "/upload/" + data.path;
+                $scope.page = page
+                return data
+            })
+        })
+    }
+    $scope.toggle = function(pic){
+        console.log(pic)
+        if($scope.finished.indexOf(pic.path) >= 0){
+            $scope.finished.splice($scope.finished.indexOf(pic.path),1)
+            pic.in = false
+        }else{
+            $scope.finished.push(pic.path)
+            pic.in = true
         }
     }
 }]).factory('UploaderSelector', ['FileUploader', "",function(FileUploader){

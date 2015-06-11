@@ -1,4 +1,4 @@
-angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMoment', 'froala']).run(['Restangular', "$state",function(Restangular, $state){
+angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMoment', 'froala', 'ngFileUpload']).run(['Restangular', "$state",function(Restangular, $state){
     // config the Restangular baseurl
     Restangular.setBaseUrl("/admin/api")
     Restangular.setErrorInterceptor(function(repsonse, defered, responseHandler){
@@ -139,18 +139,4 @@ angular.module('times', ["ui.router", 'restangular', 'mm.foundation', 'angularMo
         console.log(arguments)
     }
     
-}]).directive('uploader', ['Restangular', function(Restangular){
-    return {
-        scope: {"callback": "@"},
-        // priority: 1,
-        // controller: function($scope, $element, $attrs, $transclude) {},
-        // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
-        // restrict: 'A', // E = Element, A = Attribute, C = Class, M = Comment
-        template: '<input type="file" ng-change="changed($event)"><div class="btn btn-success" ng-click="Upload()">上传</div>',
-        link: function($scope, iElm, iAttrs, controller) {
-            $scope.changed = function(event){
-                console.log(event)
-            }
-        }
-    };
-}]);
+}])

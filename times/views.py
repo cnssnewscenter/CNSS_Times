@@ -132,9 +132,11 @@ def upload_file():
     elif request.method == "POST":
         try:
             with model.db.transaction():
-                filename = request.form.get("filename") or request.files[0].filename
+                filename = request.form.get("filename", "") or list(request.files.values())[0].filename
                 saved = gen_file_name(filename)
-                request.files[0].save(os.path.join(app.config.get("UPLOAD"), saved))
+                final_path = os.path.join(app.config.get("UPLOAD", ""), saved)
+                os.makedirs(os.path.split(final_path)[0], exist_ok=True)
+                request.files["file"].save(final_path)
                 model.Resource.create(
                     filename=filename,
                     created=datetime.now(),

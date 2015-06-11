@@ -1,5 +1,32 @@
 <div class="container">
-	<div class="col-sm-12">	
-		<uploader callback="cb"></uploader>
+	<div class="col-sm-12">
+        <div class="panel panel-{{uploading_status}}">
+            <div class="panel-heading">
+                上传文件 {{uploading_status_text}}
+            </div>
+            <div class="panel-content">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>文件名</td>
+                            <td>大小</td>
+                            <td>进度</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="file in files">
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    选择文件（可以多选）：<input type="file" nv-file-select="" uploader="uploader" multiple  /><br/>
+                </div>
+            </div>
+        </div>                
+    </div>
+    <div class="col-sm-12">	
+    
 	</div>
 </div>

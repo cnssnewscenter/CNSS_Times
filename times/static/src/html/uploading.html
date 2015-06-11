@@ -1,0 +1,5 @@
+<input type="file" ng-show="!uploading">
+<div ng-show="!uploading" class="btn btn-success" ng-click="Upload()">上传</div>
+<div class="progress" ng-show="uploading">
+    <div class="progress-bar" style="width: {{percent}}%;"></div>
+</div>

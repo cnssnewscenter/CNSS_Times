@@ -1,13 +1,14 @@
 from flask import Flask, jsonify
-from os import urandom
+import os
 from datetime import timedelta
 from json import JSONEncoder
 from datetime import datetime
 
-app = Flask(__name__)
-app.secret_key = urandom(20)
-app.permanent_session_lifetime = timedelta(days=1)
 
+app = Flask(__name__)
+app.secret_key = os.urandom(20)
+app.permanent_session_lifetime = timedelta(days=1)
+app.config.from_pyfile("config.py")
 
 class CustomJsonEncoder(JSONEncoder):
 

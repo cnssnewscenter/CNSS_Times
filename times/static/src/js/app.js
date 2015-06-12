@@ -105,6 +105,8 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.froalaOptions = {
         inlineMode: false,
         placeholder: "Edit Me",
+        language: "zh_cn",
+        buttons: ["bold", "italic", "underline", "strikeThrough", "fontSize", "fontFamily", "color", "sep", "formatBlock", "blockStyle", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent", "sep", "createLink", "insertImage", "insertVideo", "insertHorizontalRule", "undo", "redo", "html", "picManager"]
     }
     $scope.author = []
     $scope.add = function(){

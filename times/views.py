@@ -139,7 +139,7 @@ def upload_file():
                 size=os.stat(os.path.join(app.config.get("UPLOAD"), saved)).st_size,
                 path=saved
             )
-            return jsonify(err=0, path=os.path.join("upload", saved))
+            return jsonify(err=0, path=os.path.join("/upload", saved))
     except Exception as e:
         app.logger.error("when uploading at {}".format(datetime.now()), exc_info=e)
         return jsonify(err=1, errmsg="There are some errors happened, plz contact the website manager")

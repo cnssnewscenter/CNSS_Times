@@ -334,15 +334,15 @@ if ("undefined" == typeof jQuery) throw new Error("Froala requires jQuery");
                             dataType: "json"
                         }).done(a.proxy(function(b) {
                             try {
-                                if (b.link) {
+                                if (b.path) {
                                     var d = new Image;
                                     d.onerror = a.proxy(function() {
                                         a(c).remove(), this.hide(), this.throwImageError(1)
                                     }, this), d.onload = a.proxy(function() {
-                                        c.src = b.link, this.hideImageLoader(), this.hide(), this.enable(), setTimeout(function() {
+                                        c.src = b.path, this.hideImageLoader(), this.hide(), this.enable(), setTimeout(function() {
                                             a(c).trigger("touchend")
                                         }, 50), this.triggerEvent("afterUploadPastedImage", [a(c)])
-                                    }, this), d.src = b.link
+                                    }, this), d.src = b.path
                                 } else b.error ? (a(c).remove(), this.hide(), this.throwImageErrorWithMessage(b.error)) : (a(c).remove(), this.hide(), this.throwImageError(2))
                             } catch (e) {
                                 a(c).remove(), this.hide(), this.throwImageError(4)
@@ -2612,7 +2612,7 @@ function(a) {
         try {
             if (!this.triggerEvent("afterImageUpload", [b], !1)) return !1;
             var c = a.parseJSON(b);
-            c.link ? this.writeImage(c.link, !1, b) : c.error ? this.throwImageErrorWithMessage(c.error) : this.throwImageError(2)
+            c.path ? this.writeImage(c.path, !1, b) : c.error ? this.throwImageErrorWithMessage(c.error) : this.throwImageError(2)
         } catch (d) {
             this.throwImageError(4)
         }

@@ -63,7 +63,7 @@ class Post(BaseModel):
     header = JsonField()
     author = JsonField()
     created = DateTimeField()
-    published = DateTimeField()
+    published = DateTimeField(null=True)
     other = JsonField()
     operation_history = JsonField()
     status = IntegerField()

@@ -82,18 +82,23 @@ def posts(pid):
             page = int(request.args.get("page", 1))
             return jsonify(err=0, data=[i for i in model.Post.select().paginate(page, 10)])
         elif request.method == "PUT":
-            now = datetime.now()
-            model.Post.create(
-                title=request.form['title'],
-                content=request.form["content"],
-                header=json.loads(request.form['header']),
-                author=json.loads(request.form['author']),
-                type=request.form['type'],
-                created=now,
-                other={},
-                operation_history=["created at {}".format(now)],
-                status=0
-            )
+            try:
+                data = request.get_json()
+                now = datetime.now()
+                model.Post.create(
+                    title=data['title'],
+                    content=data["content"],
+                    header=data['header'],
+                    author=data['author'],
+                    type="ignore",
+                    created=now,
+                    other={},
+                    operation_history=["created at {}".format(now)],
+                    status=0,
+                    published="toView"
+                )
+            except IndexError:
+                abort(400)
             return jsonify(err=0, msg="新建成功")
     else:
         pid = int(pid)
@@ -194,7 +199,6 @@ def index_stats():
 
 @app.route('/upload/<path:path>')
 def upload_static_file(path):
-    print(app.config['UPLOAD'])
     return send_from_directory(app.config['UPLOAD'], path)
 
 

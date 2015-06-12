@@ -100,7 +100,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     Restangular.all("post").getList().then(function(response){
         $scope.passages = response
     })
-}]).controller('NewPassageController', ['Restangular', "$scope", '$modal',function(Restangular, $scope, $modal){
+}]).controller('NewPassageController', ['Restangular', "$scope", '$modal', "ngToast",function(Restangular, $scope, $modal, ngToast){
     $scope.setTitle("新建文章")
     $scope.froalaOptions = {
         inlineMode: false,
@@ -124,14 +124,14 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         $scope.author.splice($scope.author.indexOf(item), 1)
     }
     $scope.save = function(){
-        Restangular.all('post').customPUT({
+        return Restangular.all('post').customPUT({
             title: $scope.title,
             author: $scope.author,
-            header: $scope.header
-
+            header: $scope.header,
+            content: $scope.content,
         }).then(function(response){
-            // should redirect to the single post page
             console.log(response)
+            ngToast.create("保存成功")
         })
     }
     $scope.upload = function(){

@@ -3366,49 +3366,7 @@ function(a) {
             }
             return j
         }, d(""), m = f = null, j._version = i, j._prefixes = o, j.mq = t, j.testStyles = s, j
-    }(this, this.document), ! function(a) {
-        a.Editable.prototype.coreInit = function() {
-            var a = this,
-                b = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-                c = function(a) {
-                    for (var b = a.toString(), c = 0, d = 0; d < b.length; d++) c += parseInt(b.charAt(d), 10);
-                    return c > 10 ? c % 9 + 1 : c
-                };
-            if (a.options.key !== !1) {
-                // delete me, remove the credit code here
-                var d = function(a, b, c) {
-                        for (var d = Math.abs(c); d-- > 0;) a -= b;
-                        return 0 > c && (a += 123), a
-                    },
-                    e = function(a) {
-                        return a
-                    },
-                    f = function(a) {
-                        if (!a) return a;
-                        for (var f = "", g = e("charCodeAt"), h = e("fromCharCode"), i = b.indexOf(a[0]), j = 1; j < a.length - 2; j++) {
-                            for (var k = c(++i), l = a[g](j), m = "";
-                                /[0-9-]/.test(a[j + 1]);) m += a[++j];
-                            m = parseInt(m, 10) || 0, l = d(l, k, m), l ^= i - 1 & 31, f += String[h](l)
-                        }
-                        return f
-                    },
-                    g = e(f),
-                    h = function(a) {
-                        return "none" == a.css("display") ? (a.attr("style", a.attr("style") + g("zD4D2qJ-7dhuB-11bB4E1wqlhlfE4gjhkbB6C5eg1C-8h1besB-16e1==")), !0) : !1
-                    },
-                    i = function() {
-                        for (var a = 0, b = document.domain, c = b.split("."), d = "_gd" + (new Date).getTime(); a < c.length - 1 && -1 == document.cookie.indexOf(d + "=" + d);) b = c.slice(-1 - ++a).join("."), document.cookie = d + "=" + d + ";domain=" + b + ";";
-                        return document.cookie = d + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;domain=" + b + ";", b
-                    }(),
-                    j = function() {
-                        var b = g(a.options.key) || "";
-                        return b !== g("eQZMe1NJGC1HTMVANU==") && b.indexOf(i, b.length - i.length) < 0 && [g("9qqG-7amjlwq=="), g("KA3B3C2A6D1D5H5H1A3==")].indexOf(i) < 0 ? (a.$box.append(g("uA5kygD3g1h1lzrA7E2jtotjvooB2A5eguhdC-22C-16nC2B3lh1deA-21C-16B4A2B4gi1F4D1wyA-13jA4H5C2rA-65A1C10dhzmoyJ2A10A-21d1B-13xvC2I4enC4C2B5B4G4G4H1H4A10aA8jqacD1C3c1B-16D-13A-13B2E5A4jtxfB-13fA1pewxvzA3E-11qrB4E4qwB-16icA1B3ykohde1hF4A2E4clA4C7E6haA4D1xtmolf1F-10A1H4lhkagoD5naalB-22B8B4quvB-8pjvouxB3A-9plnpA2B6D6BD2D1C2H1C3C3A4mf1G-10C-8i1G3C5B3pqB-9E5B1oyejA3ddalvdrnggE3C3bbj1jC6B3D3gugqrlD8B2DB-9qC-7qkA10D2VjiodmgynhA4HA-9D-8pI-7rD4PrE-11lvhE3B5A-16C7A6A3ekuD1==")), a.$lb = a.$box.find("> div:last"), a.$ab = a.$lb.find("> a"), h(a.$lb) || h(a.$ab)) : void 0
-                    };
-                j()
-            }
-        }, a.Editable.initializers.push(a.Editable.prototype.coreInit)
-    }(jQuery),
-    function(a) {
+    }(this, this.document), function(a) {
         a.Editable.DEFAULTS = a.extend(a.Editable.DEFAULTS, {
             allowedBlankTags: ["TEXTAREA"],
             selfClosingTags: ["br", "input", "img", "hr", "param", "!--", "source", "embed", "!", "meta", "link", "base"],

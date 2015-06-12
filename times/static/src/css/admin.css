@@ -128,3 +128,13 @@ body {
 .selected {
   opacity: 0.5;
 }
+.selected::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

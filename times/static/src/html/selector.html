@@ -9,7 +9,7 @@
 				<div class="col-sm-12" style="">
 					<div class="well container-fluid">
 						<div class="col-sm-4" ng-repeat="file in finished">
-							<img ng-src="{{file}}" alt="" class="img-responsive img-thumbnail">
+							<img ng-src="{{file}}" alt="" class="img-responsive thumbnail">
 						</div>
 					</div>
 				</div>
@@ -35,7 +35,7 @@
 			<div class="row">
 				<div class="container-fluid">
 					<div class="col-sm-3" ng-repeat="pic in pics" ng-click="toggle(pic)" ng-class="{selected:pic.in}">
-						<img ng-src="{{pic.path}}" alt="" class="img-responsive img-thumbnail">	
+						<img ng-src="{{pic.path}}" alt="" class="img-responsive thumbnail">	
 						<p>{{pic.filename}}</p>
 					</div>
 				</div>

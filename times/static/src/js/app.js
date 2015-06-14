@@ -90,7 +90,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.setTitle('退出登录')
     $scope.status = '正在退出登录'
     Restangular.all("logout").customGET().then(function(){
-        $scope.status = '登出成功，即将回到首页'
+        $scope.status = '退出成功，即将回到首页'
         $timeout(function(){
             window.location.href = '/';
         }, 1000)
@@ -101,10 +101,12 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         $scope.passages = response
     })
 }]).controller('NewPassageController', ['Restangular', "$scope", '$modal', "ngToast",function(Restangular, $scope, $modal, ngToast){
+    $scope.opened = true;
     $scope.setTitle("新建文章")
+    $scope.passage = {}
     $scope.froalaOptions = {
         inlineMode: false,
-        placeholder: "Edit Me",
+        placeholder: "开始编辑吧",
         imageUpload: true,
         imageResize: false,
         defaultImageWidth: 0,
@@ -187,7 +189,9 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         if (!page)
             page = $scope.page
         Restangular.all('uploaded').getList({page: page, key: keyword}).then(function(response){
-            $scope.pics = response.map(function(data){
+            $scope.pics = response.filter(function(pic){
+                return /\.(?:gif|jpe?g|png)$/.test(pic.path)
+            }).map(function(data){
                 data.path = "/upload/" + data.path;
                 $scope.page = page
                 return data
@@ -204,11 +208,4 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             pic.in = true
         }
     }
-}]).factory('UploaderSelector', ['FileUploader', "",function(FileUploader){
-    var uploader = {};
-    uploader.upload = function(callback){
-        // the callback will receive a list of images selected or uploaded
-
-    }
-    return uploader;
 }])

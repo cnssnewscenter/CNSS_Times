@@ -1,8 +1,5 @@
 <div class="a-card">
-    <img ng-if="ispic(card.path)" ng-src="/upload/{{card.path}}" class="img-responsive thumbnail">
-    <div　ng-if="!ispic(card.path)">
-        不是图片
-    </div>
+    <img ng-src="/upload/{{card.path}}" class="img-responsive thumbnail">
 	<a href="/upload/{{card.path}}"><p>{{card.filename}}</p></a>
     <p>{{card.size/1024/1024|number: 2}} MB</p>
 </div>

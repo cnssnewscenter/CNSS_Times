@@ -67,7 +67,9 @@
 			if(!response.err){
 				manager.images.empty();
 				response.data.forEach(function(pics){
-					$("<img>").addClass("img-responsive thumbnail").attr("src", "/upload/"+pics.path).appendTo(manager.images)
+					if(/\.(?:gif|jpe?g|png)$/.test(pics.path)){
+						$("<img>").addClass("img-responsive thumbnail").attr("src", "/upload/"+pics.path).appendTo(manager.images)
+					}
 				});
 				manager.modal.find(".current").text(manager.page);
 			}

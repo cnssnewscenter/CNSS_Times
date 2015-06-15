@@ -205,6 +205,19 @@ def upload_static_file(path):
     return send_from_directory(app.config['UPLOAD'], path)
 
 
+@app.route("/index")
+def index_page():
+    posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published'))
+    results = {}
+    for i in posts:
+        if i.published.year in results:
+            results[i.published.year].append(i)
+        else:
+            results[i.published.year] = [i]
+    results = [(i, [k.index_data() for k in sorted(j, key=lambda x: x.published)]) for i, j in sorted(results.items(), key=lambda x:x[0])]
+    return jsonify(hit=get_page_hit("index") + PAGEVIEW_CACHE, posts=results)
+
+
 @app.route("/")
 def show_index():
     global PAGEVIEW_CACHE
@@ -213,7 +226,15 @@ def show_index():
     if datetime.now() - LAST_UPDATE > timedelta(minutes=10):
         model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.page == "index")
         PAGEVIEW_CACHE = 0
-    return render_template("index.html", hit=get_page_hit("index") + PAGEVIEW_CACHE)
+    posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published'))
+    results = {}
+    for i in posts:
+        if i.published.year in results:
+            results[i.published.year].append(i)
+        else:
+            results[i.published.year] = [i]
+    results = [(i, [k.to_dict() for k in sorted(j, key=lambda x: x.published)]) for i, j in sorted(results.items(), key=lambda x:x[0])]
+    return render_template("index.html", hit=get_page_hit("index") + PAGEVIEW_CACHE, posts=results)
 
 
 @app.route("/admin/", defaults={"path": None})

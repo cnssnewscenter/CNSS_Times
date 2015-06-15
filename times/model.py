@@ -73,6 +73,14 @@ class Post(BaseModel):
     status = CharField()
     deleted = BooleanField(default=False)
 
+    def index_data(self):
+        return {
+            "title": self.title,
+            "author": self.author,
+            "published": self.published,
+            "content": self.content
+        }
+
 
 class Resource(BaseModel):
 

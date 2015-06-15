@@ -191,7 +191,13 @@ def index_stats():
         "toPublish": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'toPublish')).count(),
         "published": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == "published")).count()
     }
-    return jsonify(err=0, posts=posts, resource=model.Resource.select().count())
+    index = model.Hit.try_get(page="index")
+    hit = index.hit if index else 0
+    hits = {
+        "index": hit,
+        "max": [i.to_dict() for i in model.Hit.select().order_by(model.Hit.hit).limit(3)]
+    }
+    return jsonify(err=0, posts=posts, resource=model.Resource.select().count(), hits=hits)
 
 
 @app.route('/upload/<path:path>')

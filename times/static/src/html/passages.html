@@ -14,6 +14,7 @@
 					<tr>
 						<td>序号</td>
 						<td>来源</td>
+						<td>状态</td>
 						<td>标题</td>
 						<td>题图</td>
 						<td>日期</td>
@@ -23,11 +24,23 @@
 				<tbody>
 					<tr ng-repeat="p in passages">
 						<td>{{p.id}}</td>
-						<td>{{p.author.author}}</td>
+						<td>{{p.creator}}</td>
+						<td class="{{p.status}}">
+							<select ng-model="p.status" ng-change="update_status(p)" class="form-control">
+								<option value="toView">待审</option>	
+								<option value="toPublish">待发布</option>
+								<option value="published">已发布</option>
+							</select>
+						</td>
 						<td>{{p.title}}</td>
-						<td><img ng-src="/f/{{p.head}}"></td>
+						<td style="width: 40%"><img ng-src="{{p.header}}" class="img-responsive thumbnail"></td>
 						<td><time am-time-ago="p.created"></time></td>
-						<td>发布，撤回</td>
+						<td>
+							<div class="btn-group">
+								<a ng-href="passage/{{p.id}}" class="btn btn-warning">编辑</a>
+								<a ng-click="del(p)" class="btn btn-danger" ng-href="#">删除</a>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>

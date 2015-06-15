@@ -9,11 +9,18 @@
 		<div class="form-group">
 			<label class=" col-sm-2 control-label">预定发布日期</label>
 			<div class="col-sm-10">
-				<div class="input-group">
-					<input type="text" placeholder="日期格式 {{today}}" class="form-control" ng-model="passage.published" is-open="opened" datepicker-options="{formatYear: 'yy',startingDay: 1}" ng-required="true" close-text="关闭" datepicker-popup/>
-	                <span class="input-group-btn">
-	                	<span class="btn btn-default" ng-click="opened != opened"><i class="glyphicon glyphicon-calendar"></i></span>
-	                </span>
+				<div class="input-group" class="form-control">
+					<div class="dropdown" ng-class="{open: opened}">
+					  <a class="dropdown-toggle">
+					    <div class="input-group" ng-click="opened = !opened">
+					    	<span class="form-control input">{{passage.published | date: "yyyy-MM-dd"}}</span>
+					    	<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+					    </div>
+					  </a>
+					  <ul class="dropdown-menu">
+					    <datetimepicker ng-model="passage.published" data-datetimepicker-config="{minView: 'day'}" on-set-time="opened = false"/>
+					  </ul>
+					</div>
 				</div>
 			</div>
 		</div>

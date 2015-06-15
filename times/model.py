@@ -6,6 +6,10 @@ from .utils import *
 if DEBUG:
     from peewee import SqliteDatabase
     db = SqliteDatabase("test_db.sqlite3")
+    import logging
+    logger = logging.getLogger('peewee')
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler())
 else:
     db = PostgresqlDatabase()
 
@@ -58,6 +62,7 @@ class AdminUser(BaseModel):
 class Post(BaseModel):
 
     title = CharField()
+    creator = CharField()
     content = TextField()
     header = JsonField()
     author = JsonField()

@@ -4,7 +4,7 @@ from . import model
 from functools import wraps
 from datetime import datetime, timedelta
 import os
-
+from dateutil.parser import parse
 
 PAGEVIEW_CACHE = 0
 LAST_UPDATE = datetime.now()
@@ -79,7 +79,7 @@ def posts(pid):
     if pid is None:
         if request.method == "GET":
             page = int(request.args.get("page", 1))
-            return jsonify(err=0, data=[i.to_dict() for i in model.Post.select().paginate(page, 10)])
+            return jsonify(err=0, data=[i.to_dict() for i in model.Post.select().where(model.Post.deleted == False).paginate(page, 10)])
         elif request.method == "PUT":
             try:
                 data = request.get_json()
@@ -90,8 +90,10 @@ def posts(pid):
                     header=data['header'],
                     author=data['author'],
                     created=now,
+                    creator=g.user.username,
                     other={},
-                    operation_history=["created at {}".format(now)],
+                    published=parse(data['published']).replace(tzinfo=None),
+                    operation_history=["created at {} by {}".format(now, g.user.username)],
                     status="toView"
                 )
             except IndexError:
@@ -102,9 +104,9 @@ def posts(pid):
         post = model.Post.try_get(id=pid)
         if post:
             if request.method == "GET":
-                return jsonify(err=0, post=post.to_dict())
+                return jsonify(err=0, data=post.to_dict())
             elif request.method == "DELETE":
-                post.status = -1
+                post.deleted = True
                 post.operation_history.append("deleted at {} by {}".format(datetime.now(), g.user.username))
                 post.save()
                 return jsonify(err=0, msg="已经删除到回收站")
@@ -115,13 +117,13 @@ def posts(pid):
                 post.header = data['header']
                 post.author = data["author"]
                 post.other = data['other']
+                post.published = parse(data['published']).replace(tzinfo=None)
                 post.operation_history.append("modified at {} by {}".format(datetime.now(), g.user.username))
                 status = data.get('status')
-                if status:
+                post.deleted = False
+                if status and post.status != status:
                     post.status = status
-                    if status == 'published':
-                        post.operation_history.append("pushlished at {} by {}".format(datetime.now(), g.user.username))
-                        post.published = datetime.strptime(request.form['published'], "%Y-%m-%dT%H:%M:%S.%f%Z")
+                    post.operation_history.append("set as {} at {} by {}".format(status, datetime.now(), g.user.username))
                 post.save()
                 return jsonify(err=0, msg="修改成功")
         abort(404)
@@ -170,13 +172,6 @@ def uploaded_file():
             return jsonify(err=0, data=[i.to_dict() for i in model.Resource.select().paginate(page, 30)])
 
 
-@app.route("/admin/", defaults={"path": None})
-@app.route("/admin/<path>")
-def admin_dashboard(path):
-    # Fallback Router for other
-    return send_file("static/admin.html")
-
-
 @app.route("/admin/api/stats")
 def stats():
     code = request.args.get("id")
@@ -192,9 +187,9 @@ def stats():
 def index_stats():
     posts = {
         "all": model.Post.select().where(model.Post.deleted == False).count(),
-        "toView": model.Post.select().where(model.Post.deleted == False & model.Post.status == 'toView').count(),
-        "toPublish": model.Post.select().where(model.Post.deleted == False & model.Post.status == 'toPublish').count(),
-        "published": model.Post.select().where(model.Post.deleted == False & model.Post.status == "published").count()
+        "toView": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'toView')).count(),
+        "toPublish": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'toPublish')).count(),
+        "published": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == "published")).count()
     }
     return jsonify(err=0, posts=posts, resource=model.Resource.select().count())
 
@@ -213,3 +208,10 @@ def show_index():
         model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.page == "index")
         PAGEVIEW_CACHE = 0
     return render_template("index.html", hit=get_page_hit("index") + PAGEVIEW_CACHE)
+
+
+@app.route("/admin/", defaults={"path": None})
+@app.route("/admin/<path:path>")
+def admin_dashboard(path):
+    # Fallback Router for other
+    return send_file("static/admin.html")

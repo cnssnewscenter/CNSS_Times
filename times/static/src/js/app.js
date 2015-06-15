@@ -1,4 +1,4 @@
-angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid', "ngToast", 'ui.bootstrap']).run(['Restangular', "$state",function(Restangular, $state){
+angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid', "ngToast", 'ui.bootstrap', 'ui.bootstrap.datetimepicker']).run(['Restangular', "$state",function(Restangular, $state){
     // config the Restangular baseurl
     Restangular.setBaseUrl("/admin/api")
     Restangular.setErrorInterceptor(function(response, defered, responseHandler){
@@ -105,19 +105,36 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     })
 }]).controller('PassagesController', ['Restangular', "$scope", function(Restangular, $scope){
     $scope.setTitle("文章列表")
-    Restangular.all("post").getList().then(function(response){
-        $scope.passages = response
-    })
+    $scope.fresh = function(){
+        Restangular.all("post").getList().then(function(response){
+            $scope.passages = response
+        })
+    }
+    $scope.fresh()
+    $scope.del = function(post){
+        if(confirm('确认要删除吗')){
+           Restangular.one('post', post.id).remove().then(function(){
+               $scope.fresh()
+           }) 
+        }
+    }
+    $scope.update_status = function(p){
+        Restangular.one("post", p.id).customPOST(p).then(function(){
+            $scope.fresh()
+        })
+    }
 }]).controller('NewPassageController', ["$state", 'Restangular', "$scope", '$modal', "ngToast", "$stateParams", function($state, Restangular, $scope, $modal, ngToast, $stateParams){
     $scope.opened = false;
     State = $state
     $scope.today = (new　Date()).toISOString().split("T")[0]
     if($state.$current.name == "main.new_passages"){
         $scope.passage = {}
+        $scope.setTitle("新建文章")
     }else{
-        Restangular.all('post').get({id:$stateParams.id}).then(function(response){
-            if(!repsonse.err){
-                $scope.passage = repsonse.data
+        Restangular.one('post', $stateParams.id).get().then(function(response){
+            if(!response.err){
+                $scope.passage = response.data
+                $scope.passage.published = new Date(response.data.published)
             }else{
                 ngToast.create("服务器出了一些问题。。。")
                 setTimeout(function(){
@@ -125,8 +142,10 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
                 }, 2000)
             }
         })
+        $scope.setTitle("编辑文章")
+
     }
-    $scope.setTitle("新建文章")
+    
     $scope.froalaOptions = {
         inlineMode: false,
         placeholder: "开始编辑吧",
@@ -156,9 +175,11 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             return Restangular.all('post').customPUT($scope.passage).then(function(response){
                 console.log(response)
                 ngToast.create("保存成功")
+            }, function(){
+                ngToast.warning("保存失败")
             })
         }else{
-            return $scope.passage.post().then(function(response){
+            return Restangular.one('post', $stateParams.id).customPOST($scope.passage).then(function(response){
                 console.log(response)
                 ngToast.create("保存成功")
             }, function(response){
@@ -179,9 +200,8 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             $scope.passage.header = urls[0]
         })
     }
-    $scope.log = function(event){
-        console.log(event)
-
+    $scope.time_set = function(){
+        $scope.opened = false
     }
 }]).controller('ResourceController', ['$scope', "Restangular", "FileUploader", function($scope, Restangular, FileUploader){
     $scope.setTitle("资源管理")
@@ -243,4 +263,17 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             pic.in = true
         }
     }
-}])
+}]).filter("status", function(){
+    return function(input){
+        switch(input){
+            case "toView":
+                return "等待审阅";
+            case "toPublish":
+                return "等待发布";
+            case "published":
+                return "已发布";
+            default:
+                return "未知"
+        }
+    }
+})

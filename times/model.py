@@ -59,14 +59,13 @@ class Post(BaseModel):
 
     title = CharField()
     content = TextField()
-    type = CharField()
     header = JsonField()
     author = JsonField()
     created = DateTimeField()
     published = DateTimeField(null=True)
     other = JsonField()
     operation_history = JsonField()
-    status = IntegerField()
+    status = CharField()
     deleted = BooleanField(default=False)
 
 

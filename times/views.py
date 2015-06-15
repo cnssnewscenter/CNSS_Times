@@ -3,7 +3,6 @@ from flask import render_template, jsonify, request, g, session, abort, send_fil
 from . import model
 from functools import wraps
 from datetime import datetime, timedelta
-import json
 import os
 
 
@@ -90,7 +89,6 @@ def posts(pid):
                     content=data["content"],
                     header=data['header'],
                     author=data['author'],
-                    type="ignore",
                     created=now,
                     other={},
                     operation_history=["created at {}".format(now)],
@@ -111,14 +109,19 @@ def posts(pid):
                 post.save()
                 return jsonify(err=0, msg="已经删除到回收站")
             elif request.method == "POST":
-                post.title = request.form['title']
-                post.content = request.form['content']
-                post.header = json.loads(request.form['header'])
-                post.author = json.loads(request.form["type"])
-                post.other = json.loads(request.form['other'])
+                data = request.get_json()
+                post.title = data['title']
+                post.content = data['content']
+                post.header = data['header']
+                post.author = data["author"]
+                post.other = data['other']
                 post.operation_history.append("modified at {} by {}".format(datetime.now(), g.user.username))
-                post.status = int(request.form.get('status'))
-                post.published = datetime.strptime(request.form['published'], "%Y-%m-%dT%H:%M:%S.%f%Z")
+                status = data.get('status')
+                if status:
+                    post.status = status
+                    if status == 'published':
+                        post.operation_history.append("pushlished at {} by {}".format(datetime.now(), g.user.username))
+                        post.published = datetime.strptime(request.form['published'], "%Y-%m-%dT%H:%M:%S.%f%Z")
                 post.save()
                 return jsonify(err=0, msg="修改成功")
         abort(404)

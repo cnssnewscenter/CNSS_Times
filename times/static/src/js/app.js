@@ -1,7 +1,7 @@
 angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid', "ngToast", 'ui.bootstrap']).run(['Restangular', "$state",function(Restangular, $state){
     // config the Restangular baseurl
     Restangular.setBaseUrl("/admin/api")
-    Restangular.setErrorInterceptor(function(repsonse, defered, responseHandler){
+    Restangular.setErrorInterceptor(function(response, defered, responseHandler){
         if(response.status == 403){
             console.log("Should login")
             $state.go("login")
@@ -28,6 +28,10 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             }
         }
     })
+}]).config(['ngToastProvider', function(ngToastProvider) {
+    ngToastProvider.configure({
+        animation: 'slide' // or 'fade'
+    });
 }]).config(['$stateProvider', "$locationProvider",function($stateProvider, $locationProvider) {
     $locationProvider.html5Mode(true)
     $stateProvider.state("login", {
@@ -53,6 +57,10 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         templateUrl: "/static/src/html/passages.html",
         url: "/passages",
         controller: "PassagesController"
+    }).state("main.passage", {
+        templateUrl: "/static/src/html/new_passages.html",
+        url: "/passage/:id",
+        controller: "NewPassageController",
     }).state("main.new_passages", {
         templateUrl: "/static/src/html/new_passages.html",
         url: "/new_passages",
@@ -100,10 +108,25 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     Restangular.all("post").getList().then(function(response){
         $scope.passages = response
     })
-}]).controller('NewPassageController', ['Restangular', "$scope", '$modal', "ngToast",function(Restangular, $scope, $modal, ngToast){
-    $scope.opened = true;
+}]).controller('NewPassageController', ["$state", 'Restangular', "$scope", '$modal', "ngToast", "$stateParams", function($state, Restangular, $scope, $modal, ngToast, $stateParams){
+    $scope.opened = false;
+    State = $state
+    $scope.today = (new　Date()).toISOString().split("T")[0]
+    if($state.$current.name == "main.new_passages"){
+        $scope.passage = {}
+    }else{
+        Restangular.all('post').get({id:$stateParams.id}).then(function(response){
+            if(!repsonse.err){
+                $scope.passage = repsonse.data
+            }else{
+                ngToast.create("服务器出了一些问题。。。")
+                setTimeout(function(){
+                    $state.go("main.passages")
+                }, 2000)
+            }
+        })
+    }
     $scope.setTitle("新建文章")
-    $scope.passage = {}
     $scope.froalaOptions = {
         inlineMode: false,
         placeholder: "开始编辑吧",
@@ -117,7 +140,10 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.author = []
     $scope.add = function(){
         if($scope.name && $scope.job){
-            $scope.author.push({name: $scope.name, job: $scope.job})
+            if(!$scope.passage.author){
+                $scope.passage.author = []
+            }
+            $scope.passage.author.push({name: $scope.name, job: $scope.job})
             $scope.name = ""
             $scope.job = ""
         }
@@ -126,15 +152,21 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         $scope.author.splice($scope.author.indexOf(item), 1)
     }
     $scope.save = function(){
-        return Restangular.all('post').customPUT({
-            title: $scope.title,
-            author: $scope.author,
-            header: $scope.header,
-            content: $scope.content,
-        }).then(function(response){
-            console.log(response)
-            ngToast.create("保存成功")
-        })
+        if($state.$current.name == "main.new_passages"){
+            return Restangular.all('post').customPUT($scope.passage).then(function(response){
+                console.log(response)
+                ngToast.create("保存成功")
+            })
+        }else{
+            return $scope.passage.post().then(function(response){
+                console.log(response)
+                ngToast.create("保存成功")
+            }, function(response){
+                console.log(response)
+                ngToast.warning("保存失败")
+            }) // save the change
+        }
+        
     }
     $scope.upload = function(){
         console.log("Test")
@@ -144,10 +176,13 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             controller: "SelectorController",
             size: "lg"
         }).result.then(function(urls){
-            $scope.header = urls[0]
+            $scope.passage.header = urls[0]
         })
     }
-   
+    $scope.log = function(event){
+        console.log(event)
+
+    }
 }]).controller('ResourceController', ['$scope', "Restangular", "FileUploader", function($scope, Restangular, FileUploader){
     $scope.setTitle("资源管理")
     $scope.page = 1
@@ -180,7 +215,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     }
     $scope.uploader.onSuccessItem = function(item, response){
         if(!response.err){
-            $scope.finished.push("/"+response.path)
+            $scope.finished.push(response.path)
         }
     }
     $scope.page = 1

@@ -1,4 +1,4 @@
-from peewee import Model, PostgresqlDatabase, TextField, CharField, DateTimeField, IntegerField, BooleanField
+from peewee import Model, PostgresqlDatabase, TextField, CharField, DateTimeField, IntegerField, BooleanField, BigIntegerField
 from .config import DEBUG
 import json
 from .utils import *

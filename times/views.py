@@ -5,6 +5,7 @@ from functools import wraps
 from datetime import datetime, timedelta
 import os
 from dateutil.parser import parse
+import math
 
 PAGEVIEW_CACHE = 0
 LAST_UPDATE = datetime.now()
@@ -205,36 +206,51 @@ def upload_static_file(path):
     return send_from_directory(app.config['UPLOAD'], path)
 
 
-@app.route("/index")
-def index_page():
-    posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published'))
-    results = {}
-    for i in posts:
-        if i.published.year in results:
-            results[i.published.year].append(i)
-        else:
-            results[i.published.year] = [i]
-    results = [(i, [k.index_data() for k in sorted(j, key=lambda x: x.published)]) for i, j in sorted(results.items(), key=lambda x:x[0])]
-    return jsonify(hit=get_page_hit("index") + PAGEVIEW_CACHE, posts=results)
-
-
-@app.route("/")
-def show_index():
+@app.route('/hit/<page>')
+def Hit(page):
     global PAGEVIEW_CACHE
     PAGEVIEW_CACHE += 1
     # 每10分钟存储访问量的数据
     if datetime.now() - LAST_UPDATE > timedelta(minutes=10):
-        model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.page == "index")
+        a = model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.page == page).execute()
+        if a == 0:
+            model.Hit.insert(hit=PAGEVIEW_CACHE, page=page)
         PAGEVIEW_CACHE = 0
+    return " "
+
+
+@app.route('/year/<year>')
+@app.route("/", defaults={"year": None})
+def show_index(year):
+    global PAGEVIEW_CACHE
+    page = int(request.args.get('p', 1))
+    year = int(year) if year else datetime.now().year
     posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published'))
-    results = {}
+    hit = model.Hit.try_get(page="index")
+    if hit:
+        hit = hit.hit + PAGEVIEW_CACHE
+    else:
+        hit = 0
+    current_year = []
+    years = []
     for i in posts:
-        if i.published.year in results:
-            results[i.published.year].append(i)
+        if i.published.year == year:
+            current_year.append(i)
         else:
-            results[i.published.year] = [i]
-    results = [(i, [k.to_dict() for k in sorted(j, key=lambda x: x.published)]) for i, j in sorted(results.items(), key=lambda x:x[0])]
-    return render_template("index.html", hit=get_page_hit("index") + PAGEVIEW_CACHE, posts=results)
+            if i.published.year not in years:
+                years.append(i.published.year)
+    years = sorted(years + [year])
+    current_year = list(sorted(current_year, key=lambda x: x.published))
+    length = len(current_year)
+    pages = range(1, math.ceil(length / 8) + 1)
+
+    if page > length / 8:
+        page = math.ceil(length / 8)
+
+    current_year = current_year[8 * (page - 1):8*page + 1]
+
+    return render_template("index.html", posts=current_year, current_page=page, years=years, current=year, hit=hit, pages=pages, cur_page=page)
+
 
 
 @app.route("/admin/", defaults={"path": None})

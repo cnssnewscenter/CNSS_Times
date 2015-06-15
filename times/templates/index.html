@@ -24,69 +24,27 @@
     </header>
     <div class="container main">
         <div class="col-sm-2 left">
-            <div class="year-wrapper"><div class="year active">2015</div></div>
-            <div class="year-wrapper"><div class="year">2014</div></div>
+            {% for i in years %}
+            <div class="year-wrapper"><a href="/year/{{i}}" class="year {{'active' if i == current}}">{{i}}</a></div>
+            {% endfor %}
         </div>
         <div class="col-sm-10 right">
+            {% for p in posts %}
             <div class="col-sm-6">
                 <div class="block">
-                    <div class="date"><span class="month">七</span><span class="day">28</span></div>
-                    <div class="hover"><span>2015年1首页故事</span></div>
+                    <div class="date"><span class="month">{{p.published.month}}</span><span class="day">{{p.published.day}}</span></div>
+                    <a class="hover" href="/p/{{p.id}}"><span>{{p.title}}</span></a>
                     <div class="background">
-                        <img src="/static/img/test.png" alt="">
+                        <img src="{{p.header}}">
                     </div>
                 </div>  
             </div>
-            <div class="col-sm-6">
-                <div class="block">
-                    <div class="date"><span class="month">七</span><span class="day">28</span></div>
-                    <div class="hover"><span>2015年1首页故事</span></div>
-                    <div class="background">
-                        <img src="/static/img/test.png" alt="">
-                    </div>
-                </div>  
-            </div>
-            <div class="col-sm-6">
-                <div class="block">
-                    <div class="date"><span class="month">七</span><span class="day">28</span></div>
-                    <div class="hover"><span>2015年1首页故事</span></div>
-                    <div class="background">
-                        <img src="/static/img/test.png" alt="">
-                    </div>
-                </div>  
-            </div>
-            <div class="col-sm-6">
-                <div class="block">
-                    <div class="date"><span class="month">七</span><span class="day">28</span></div>
-                    <div class="hover"><span>2015年1首页故事</span></div>
-                    <div class="background">
-                        <img src="/static/img/test.png" alt="">
-                    </div>
-                </div>  
-            </div>
-            <div class="col-sm-6">
-                <div class="block">
-                    <div class="date"><span class="month">七</span><span class="day">28</span></div>
-                    <div class="hover"><span>2015年1首页故事</span></div>
-                    <div class="background">
-                        <img src="/static/img/test.png" alt="">
-                    </div>
-                </div>  
-            </div>
-            <div class="col-sm-6">
-                <div class="block">
-                    <div class="date"><span class="month">七</span><span class="day">28</span></div>
-                    <div class="hover"><span>2015年1首页故事</span></div>
-                    <div class="background">
-                        <img src="/static/img/test.png" alt="">
-                    </div>
-                </div>  
-            </div>     
+            {% endfor %}
             <div class="col-sm-12">
                 <div class="pages">
-                    <div class="page">1</div>
-                    <div class="page">2</div>
-                    <div class="page">3</div>
+                    {% for i in pages%}
+                    <a href="/year/{{year}}?p={{cur_page}}" class="page {{"active" if i == cur_page}}">{{i}}</a>
+                    {% endfor %}
                 </div>
             </div>
 

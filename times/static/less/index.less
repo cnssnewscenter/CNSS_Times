@@ -56,8 +56,10 @@ header{
 	transition: background-color 0.5s, color 0.5s;
 	&.active, &:hover{
 		background-color: @basecolor;
-		color: white
+		color: white;
+		text-decoration: none;
 	}
+	text-decoration: none;
 	height: 10rem;
 	width: 10rem;
 	line-height: 10rem;
@@ -157,9 +159,11 @@ header{
 		border: solid 2px @basecolor;
 		transition: color  0.5s, background-color 0.5s;
 		color: @basecolor;
+		text-decoration: none;
 		&:hover, &.active{
 			background-color: @basecolor;
-			color: white
+			color: white;
+			text-decoration: none;
 		}
 	}
 }

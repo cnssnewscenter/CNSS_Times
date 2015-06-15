@@ -6,18 +6,20 @@ from datetime import datetime, timedelta
 import os
 from dateutil.parser import parse
 import math
+from collections import defaultdict
 
-PAGEVIEW_CACHE = 0
+PAGEVIEW_CACHE = defaultdict(int)
 LAST_UPDATE = datetime.now()
 
 
 def get_page_hit(page):
     page_ = model.Hit.try_get(page=page)
     if page_:
-        return page_.hit
+        return page_.hit + PAGEVIEW_CACHE[page]
     else:
-        model.Hit.create(page=page, hit=0)
-        return 0
+        hit = model.Hit.create(page=page, hit=PAGEVIEW_CACHE[page])
+        PAGEVIEW_CACHE[page] = 0
+        return 0 + hit.hit
 
 
 @app.before_request
@@ -209,13 +211,13 @@ def upload_static_file(path):
 @app.route('/hit/<page>')
 def Hit(page):
     global PAGEVIEW_CACHE
-    PAGEVIEW_CACHE += 1
+    PAGEVIEW_CACHE[page] += 1
     # 每10分钟存储访问量的数据
     if datetime.now() - LAST_UPDATE > timedelta(minutes=10):
-        a = model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE).where(model.Hit.page == page).execute()
+        a = model.Hit.update(hit=model.Hit.hit + PAGEVIEW_CACHE[page]).where(model.Hit.page == page).execute()
         if a == 0:
             model.Hit.insert(hit=PAGEVIEW_CACHE, page=page)
-        PAGEVIEW_CACHE = 0
+        PAGEVIEW_CACHE[page] = 0
     return " "
 
 
@@ -226,11 +228,7 @@ def show_index(year):
     page = int(request.args.get('p', 1))
     year = int(year) if year else datetime.now().year
     posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published'))
-    hit = model.Hit.try_get(page="index")
-    if hit:
-        hit = hit.hit + PAGEVIEW_CACHE
-    else:
-        hit = 0
+    hit = get_page_hit("year-" + str(year))
     current_year = []
     years = []
     for i in posts:
@@ -250,6 +248,22 @@ def show_index(year):
     current_year = current_year[8 * (page - 1):8*page + 1]
 
     return render_template("index.html", posts=current_year, current_page=page, years=years, current=year, hit=hit, pages=pages, cur_page=page)
+
+
+@app.route('/p/<pid>')
+def post(pid):
+    post = model.Post.try_get(id=int(pid))
+    if not post or post.deleted:
+        abort(404)
+    else:
+        hit = get_page_hit("post"+str(pid))
+        next_p = list(model.Post.select().where((model.Post.id > int(pid)) & (model.Post.delete == False)).limit(1))
+        prev_p = list(model.Post.select().where((model.Post.id < int(pid)) & (model.Post.delete == False)).limit(1))
+        year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1) & (model.Post.published <= post.published.replace(month=12, day=31)))))
+        year.remove(post)
+        return render_template('post.html', post=post, category=year, prev_p=prev_p, next_p=prev_p, hit=hit)
+
+
 
 
 

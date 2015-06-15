@@ -47,7 +47,7 @@ header .banner {
   border-color: white;
   width: 100%;
 }
-.year {
+.index .year {
   border: solid 2px #76b2d1;
   color: #76b2d1;
   font-size: 2.4rem;
@@ -60,16 +60,16 @@ header .banner {
   margin: 2rem auto;
   display: inline-block;
 }
-.year.active,
-.year:hover {
+.index .year.active,
+.index .year:hover {
   background-color: #76b2d1;
   color: white;
   text-decoration: none;
 }
-.year-wrapper {
+.index .year-wrapper {
   text-align: center;
 }
-.left {
+.index .left {
   padding-top: 2rem;
 }
 .block {
@@ -226,4 +226,55 @@ footer img:hover + .qrcode.book img {
 }
 #activity_intro .modal-body {
   text-indent: 2em;
+}
+.post header {
+  background-image: url(/static/img/bg_post.png);
+  background-size: initial;
+  background-repeat: repeat-x;
+}
+.post header .top {
+  padding-bottom: 6rem;
+}
+.post .info {
+  color: #9a9a9a;
+}
+.post .main .header {
+  background-size: cover;
+  background-position: center center;
+  min-height: 300px;
+}
+.post .title {
+  border-bottom: solid 2px #ddd;
+  padding-bottom: 20px;
+}
+.post .date-block {
+  border: solid 2px #76b2d1;
+  color: #76b2d1;
+  font-size: 2rem;
+  transition: background-color 0.5s, color 0.5s;
+  text-align: right;
+  width: 4em;
+  height: 4em;
+  padding: 0.8em;
+  line-height: 1;
+  display: block;
+  text-decoration: none;
+}
+.post .date-block .year {
+  font-size: 0.95em;
+}
+.post .date-block .month {
+  font-size: 0.8em;
+}
+.post .date-block .day {
+  font-size: 0.6em;
+}
+.post .date-block.active,
+.post .date-block:hover {
+  background-color: #76b2d1;
+  color: white !important;
+  text-decoration: none;
+}
+.post .date-block.self {
+  font-size: 3em;
 }

@@ -48,30 +48,34 @@ header{
 		width: 100%;
 	}
 }
-.year{
-	border: solid 2px @basecolor;
-	color: @basecolor;
-	font-size: 2.4rem;
-	text-align: center;
-	transition: background-color 0.5s, color 0.5s;
-	&.active, &:hover{
-		background-color: @basecolor;
-		color: white;
+.index{
+	.year{
+		border: solid 2px @basecolor;
+		color: @basecolor;
+		font-size: 2.4rem;
+		text-align: center;
+		transition: background-color 0.5s, color 0.5s;
+		&.active, &:hover{
+			background-color: @basecolor;
+			color: white;
+			text-decoration: none;
+		}
 		text-decoration: none;
+		height: 10rem;
+		width: 10rem;
+		line-height: 10rem;
+		margin: 2rem auto;	
+		display: inline-block;
 	}
-	text-decoration: none;
-	height: 10rem;
-	width: 10rem;
-	line-height: 10rem;
-	margin: 2rem auto;	
-	display: inline-block;
+	.year-wrapper{
+		text-align: center;
+	}
+	.left{
+		padding-top: 2rem;
+	}
 }
-.year-wrapper{
-	text-align: center;
-}
-.left{
-	padding-top: 2rem;
-}
+
+
 .block{
 	position: relative;
 	margin: 5rem 2rem 0 0;
@@ -229,4 +233,60 @@ footer img:hover + .qrcode.book img {
 }
 #activity_intro .modal-body {
   text-indent: 2em;
+}
+.post{
+	header{
+		background-image: url(/static/img/bg_post.png);
+		background-size: initial;
+		background-repeat: repeat-x;
+		.top{
+			padding-bottom: 6rem;
+		}
+
+	}
+	.info{
+		color: #9a9a9a;
+	}
+	.main{
+		.header{
+			background-size: cover;
+			background-position: center center;
+			min-height: 300px;
+		}
+	}
+	.title{
+		border-bottom: solid 2px #ddd;
+		padding-bottom: 20px;
+	}
+	.date-block{
+		border: solid 2px @basecolor;
+		color: @basecolor;
+		font-size: 2rem;
+		transition: background-color 0.5s, color 0.5s;
+		text-align: right;
+		width: 4em;
+		height: 4em;
+		padding: 0.8em;
+		line-height: 1;
+		display: block;
+		.year{
+			font-size: 0.95em;
+		}
+		.month{
+			font-size: 0.8em;
+		}
+		.day{
+			font-size: 0.6em;
+		}
+		&.active, &:hover{
+			background-color: @basecolor;
+			color: white !important;
+			text-decoration: none;
+		}
+		text-decoration: none;
+		&.self{
+			
+			font-size: 3em;
+		}
+	}
 }

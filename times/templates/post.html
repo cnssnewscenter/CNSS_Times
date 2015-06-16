@@ -67,6 +67,22 @@
                 <div class="content">
                     {{post.content | safe}}
                 </div>
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        {% if prev_p %}
+                        <a href="{{prev_p.id}}">{{prev_p.title}}</a>
+                        {% else %}
+                        <a href="#">没有了</a>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        {% if next_p %}
+                        <a href="{{next_p.id}}">{{next_p.title}}</a>
+                        {% else %}
+                        <a href="#">没有了</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             <div class="col-sm-2">
                 {% for i in post.author %}
@@ -79,6 +95,7 @@
                     <p class="job">点击量</p>
                     <p>{{hit}}</p>
                 </div>
+
             </div>
         </div>
     </div>

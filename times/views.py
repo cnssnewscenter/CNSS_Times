@@ -257,11 +257,11 @@ def post(pid):
         abort(404)
     else:
         hit = get_page_hit("post"+str(pid))
-        next_p = list(model.Post.select().where((model.Post.id > int(pid)) & (model.Post.delete == False)).limit(1))
-        prev_p = list(model.Post.select().where((model.Post.id < int(pid)) & (model.Post.delete == False)).limit(1))
+        next_p = list(model.Post.select().where((model.Post.published > post.published) & (model.Post.deleted == False)).order_by(model.Post.published).limit(1))
+        prev_p = list(model.Post.select().where((model.Post.published < post.published) & (model.Post.deleted == False)).order_by(model.Post.published.desc()).limit(1))
         year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1) & (model.Post.published <= post.published.replace(month=12, day=31)))))
         year.remove(post)
-        return render_template('post.html', post=post, category=year, prev_p=prev_p, next_p=prev_p, hit=hit)
+        return render_template('post.html', post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
 
 
 

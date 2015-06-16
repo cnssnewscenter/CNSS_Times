@@ -43,15 +43,16 @@
                     <div class="month">{{"{:0>2}".format(post.published.month)}}</div>
                     <div class="day">.{{"{:0>2}".format(post.published.day)}}</div>
                 </div>
-                {% for i in category %}
-                <div class="col-sm-6">
-                    <a class="date-block active" href="/p/{{i.id}}">
+                <div class="others">
+                    {% for i in category %}
+                    <a class="date-block" href="/p/{{i.id}}">
                         <div class="year">{{i.published.year}}</div>
                         <div class="month">{{"{:0>2}".format(i.published.month)}}</div>
                         <div class="day">.{{"{:0>2}".format(i.published.day)}}</div>
                     </a>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                
             </div>
             <div class="col-sm-10">
                 <div class="header" style="background-image:url({{post.header}})"> 
@@ -70,14 +71,14 @@
                 <div class="col-sm-12">
                     <div class="col-sm-6">
                         {% if prev_p %}
-                        <a href="{{prev_p.id}}">{{prev_p.title}}</a>
+                        <a href="{{prev_p[0].id}}">上一篇：{{prev_p[0].title}}</a>
                         {% else %}
                         <a href="#">没有了</a>
                         {% endif %}
                     </div>
                     <div class="col-sm-6 text-right">
                         {% if next_p %}
-                        <a href="{{next_p.id}}">{{next_p.title}}</a>
+                        <a href="{{next_p[0].id}}">下一篇：{{next_p[0].title}}</a>
                         {% else %}
                         <a href="#">没有了</a>
                         {% endif %}

@@ -23,7 +23,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="p in passages">
-						<td>{{p.id}}</td>
+						<td><a ng-href="/p/{{p.id}}" target="_blank">{{p.id}}</a></td>
 						<td>{{p.creator}}</td>
 						<td class="{{p.status}}">
 							<select ng-model="p.status" ng-change="update_status(p)" class="form-control">

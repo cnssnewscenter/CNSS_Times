@@ -228,7 +228,7 @@ def show_index(year):
     page = int(request.args.get('p', 1))
     year = int(year) if year else datetime.now().year
     posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published'))
-    hit = get_page_hit("year-" + str(year))
+    hit = get_page_hit("year" + str(year))
     current_year = []
     years = []
     for i in posts:

@@ -244,8 +244,20 @@ footer img:hover + .qrcode.book img {
   min-height: 300px;
 }
 .post .title {
-  border-bottom: solid 2px #ddd;
+  border-bottom: solid 2px #9a9a9a;
   padding-bottom: 20px;
+}
+.post .job {
+  font-weight: 500;
+  color: #76b2d1;
+}
+.post .author-block {
+  margin: 2em 0;
+  line-height: 1;
+  color: #9a9a9a;
+}
+.post .author-block:first-child {
+  margin-top: 73px;
 }
 .post .date-block {
   border: solid 2px #76b2d1;

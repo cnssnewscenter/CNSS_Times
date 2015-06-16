@@ -103,7 +103,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             window.location.href = '/';
         }, 1000)
     })
-}]).controller('PassagesController', ['Restangular', "$scope", function(Restangular, $scope){
+}]).controller('PassagesController', ['Restangular', "$scope", "ngToast",function(Restangular, $scope, ngToast){
     $scope.setTitle("文章列表")
     $scope.fresh = function(){
         Restangular.all("post").getList().then(function(response){
@@ -121,6 +121,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.update_status = function(p){
         Restangular.one("post", p.id).customPOST(p).then(function(){
             $scope.fresh()
+            ngToast.create("已更新状态")
         })
     }
 }]).controller('NewPassageController', ["$state", 'Restangular', "$scope", '$modal', "ngToast", "$stateParams", function($state, Restangular, $scope, $modal, ngToast, $stateParams){

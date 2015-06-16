@@ -5,6 +5,11 @@
     <title>成电时光</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/index.css"/>
+    <script>
+        var request = new XMLHttpRequest();
+        request.open('GET', '/hit/year{{current}}');
+        request.send();
+    </script>
 </head>
 <body class="index">
     <header>

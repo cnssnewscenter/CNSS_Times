@@ -138,3 +138,6 @@ body {
   right: 0;
   bottom: 0;
 }
+.f-image-list .thumbnail {
+  cursor: pointer;
+}

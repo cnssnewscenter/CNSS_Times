@@ -259,15 +259,22 @@ footer img:hover + .qrcode.book img {
 .post .author-block:first-child {
   margin-top: 73px;
 }
+.post .date-block-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+}
 .post .date-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   border: solid 2px #76b2d1;
   color: #76b2d1;
   font-size: 2rem;
   transition: background-color 0.5s, color 0.5s;
-  text-align: right;
-  width: 4em;
-  height: 4em;
-  padding: 0.8em;
+  box-sizing: content-box;
   line-height: 1;
   display: block;
   text-decoration: none;
@@ -289,6 +296,21 @@ footer img:hover + .qrcode.book img {
 }
 .post .date-block.self {
   font-size: 3em;
+}
+.post .date-block span {
+  display: block;
+}
+.post .date-block .text {
+  display: inline-block;
+}
+.post .date-block .text-center {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 2.35714286em;
 }
 .post .others {
   margin: 1em -10px;

@@ -1,0 +1,13 @@
+{% macro date_block(post, add_class='') -%}
+    <div class="date-block-wrapper">
+        <a class="date-block {{add_class}}" href="#">
+            <div class="text-center">
+                <div class="text text-right">
+                    <span class="year">{{post.published.year}}</span>
+                    <span class="month">{{"{:0>2}".format(post.published.month)}}</span>
+                    <span class="day">.{{"{:0>2}".format(post.published.day)}}</span>
+                </div>
+            </div>
+        </a>
+    </div>
+{%- endmacro %}

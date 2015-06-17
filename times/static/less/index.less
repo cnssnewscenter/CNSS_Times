@@ -270,15 +270,19 @@ footer img:hover + .qrcode.book img {
 	.author-block:first-child{
 		margin-top: 73px;
 	}
+	.date-block-wrapper{
+		position: relative;
+		width: 100%;
+		padding-bottom: 100%;
+	}
 	.date-block{
+		position: absolute;
+		top: 0; left: 0; right: 0; bottom: 0;
 		border: solid 2px @basecolor;
 		color: @basecolor;
 		font-size: 2rem;
 		transition: background-color 0.5s, color 0.5s;
-		text-align: right;
-		width: 4em;
-		height: 4em;
-		padding: 0.8em;
+		box-sizing: content-box;
 		line-height: 1;
 		display: block;
 		.year{
@@ -297,8 +301,22 @@ footer img:hover + .qrcode.book img {
 		}
 		text-decoration: none;
 		&.self{
-			
 			font-size: 3em;
+		}
+		span{
+			display: block;
+		}
+		.text{
+			display: inline-block;
+		}
+		.text-center{
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: auto;
+			height: 99/42em;
 		}
 	}
 	.others{

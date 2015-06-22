@@ -58,7 +58,7 @@ def need_login(func):
 def login_status():
     if request.method == "GET":
         if g.logined:
-            return jsonify(err=0, logined=True, user=g.user.to_dict())
+            return jsonify(err=0, logined=True)
         else:
             return jsonify(err=1, logined=False)
     elif request.method == "POST":

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin</title>
-    <base href="/admin/">
+    <base href="{{base_url}}admin/">
     <script>
     var baseurl = "{{base_url}}"
     </script>
@@ -35,7 +35,6 @@
     <link rel="stylesheet" href="{{url_for('static',filename='bower_components/ngtoast/dist/ngToast.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='bower_components/ngtoast/dist/ngToast-animations.min.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='src/css/admin.css')}}">
-    <!-- endbuild -->
 </head>
 <body ui-view>
 </body>

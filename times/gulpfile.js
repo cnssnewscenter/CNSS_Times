@@ -12,19 +12,19 @@ var gulp = require('gulp'),
 
 
 gulp.task('template', function(){
-    gulp.src('static/src/html/*.html')
+    gulp.src('src/html/*.html')
         .pipe(templateCache({
             root: "/static/src/html/",
             module: "times"
         }))
-        .pipe(gulp.dest("static/dist"))
+        .pipe(gulp.dest("."))
 })
 
 gulp.task('compile_admin', function(){
     var asset = useref.assets({
         searchPath: "."
     })
-    gulp.src('static/admin.html')
+    gulp.src('templates/admin.html')
         .pipe(asset)
         .pipe(gulpif("*.css", minifyCss()))
         .pipe(rev())
@@ -32,7 +32,7 @@ gulp.task('compile_admin', function(){
         .pipe(useref())
         .pipe(revReplace())
         .pipe(debug({title: "output"}))
-        .pipe(gulp.dest("static/dist"))
+        .pipe(gulp.dest("templates"))
 })
 
 gulp.task("clean", function(cb){

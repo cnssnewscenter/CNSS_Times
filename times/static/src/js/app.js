@@ -33,7 +33,6 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         animation: 'slide' // or 'fade'
     });
 }]).config(['$stateProvider', "$locationProvider",function($stateProvider, $locationProvider) {
-    $locationProvider.html5Mode(true)
     $stateProvider.state("login", {
         url: "/login",
         templateUrl: "/static/src/html/login.html",

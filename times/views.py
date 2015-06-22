@@ -274,11 +274,7 @@ def post(pid):
         return render_template('post.html', base_url=app.prefix, post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
 
 
-
-
-
 @app.route("/admin/", defaults={"path": None})
-@app.route("/admin/<path:path>")
 def admin_dashboard(path):
     # Fallback Router for other
-    return send_file("static/admin.html")
+    return render_template("admin.html", base_url=app.prefix)

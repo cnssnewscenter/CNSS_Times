@@ -1,6 +1,6 @@
 angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid', "ngToast", 'ui.bootstrap', 'ui.bootstrap.datetimepicker']).run(['Restangular', "$state",function(Restangular, $state){
     // config the Restangular baseurl
-    Restangular.setBaseUrl("/admin/api")
+    Restangular.setBaseUrl(baseurl+"/admin/api")
     Restangular.setErrorInterceptor(function(response, defered, responseHandler){
         if(response.status == 403){
             console.log("Should login")
@@ -22,7 +22,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             $state.go("login")
         }else{
             // check if we in the login page 
-            if(window.location.pathname == '/admin/login' || window.location.pathname == "/admin/"){
+            if(window.location.pathname == baseurl+'/admin/login' || window.location.pathname == baseurl+"/admin/"){
                 // go to the dashboard
                 $state.go("main.dashboard")
             }
@@ -154,7 +154,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         imageResize: false,
         defaultImageWidth: 0,
         language: "zh_cn",
-        imageUploadURL: '/admin/upload',
+        imageUploadURL: baseurl+'/admin/upload',
         buttons: ["bold", "italic", "underline", "strikeThrough", "fontSize", "fontFamily", "color", "sep", "formatBlock", "blockStyle", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent", "sep", "createLink", "insertImage", "insertVideo", "insertHorizontalRule", "undo", "redo", "html", "picManager"]
     }
     $scope.author = []
@@ -208,7 +208,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.setTitle("资源管理")
     $scope.page = 1
     $scope.uploader = new FileUploader({
-        url: "/admin/upload",
+        url: baseurl+"/admin/upload",
         autoUpload: true,
         removeAfterUpload: true,
     })
@@ -227,7 +227,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
 
 }]).controller('SelectorController', ['$scope', "FileUploader", "$modalInstance", 'Restangular',function($scope, FileUploader, $modalInstance, Restangular){
     $scope.uploader = new FileUploader({
-        url: "/admin/upload",
+        url: baseurl+"/admin/upload",
         autoUpload: true
     })
     $scope.finished = []

@@ -11,7 +11,7 @@ if DEBUG:
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
 else:
-    db = PostgresqlDatabase()
+    db = PostgresqlDatabase('times', user="times")
 
 
 class JsonField(TextField):

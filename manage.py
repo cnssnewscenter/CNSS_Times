@@ -34,5 +34,10 @@ def reset_password():
 
     print("Finish reset password for {}".format(username))
 
+@manager.command
+def clean():
+    print('This will drop the whole datebase')
+    print('you should run "dropdb times" with correct privileges')
+
 if __name__ == "__main__":
     manager.run()

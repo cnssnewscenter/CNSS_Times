@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>成电时光</title>
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/index.css"/>
+    <link rel="stylesheet" href="{{url_for("static", filename="css/bootstrap.min.css")}}">
+    <link rel="stylesheet" href="{{url_for("static", filename="css/index.css")}}"/>
     <script>
         var request = new XMLHttpRequest();
-        request.open('GET', '/hit/year{{current}}');
+        request.open('GET', '{{url_for("Hit", page="year{}".format(current))}}');
         request.send();
     </script>
 </head>
 <body class="index">
     <header>
         <div class="container top">
-            <img src="/static/img/logo.png" class="pull-left"/>
+            <img src="{{url_for("static",filename="img/logo.png")}}" class="pull-left"/>
             <div class="pull-right">
                 <a href="http://www.uestc.edu.cn/">学校主页</a>
                 <a href="http://www.new1.uestc.edu.cn/">新闻中心</a>
@@ -23,14 +23,14 @@
             </div>
         </div>
         <div class="container img-container">
-            <img src="/static/img/title.png" class="banner"/>
+            <img src="{{url_for("static",filename="img/title.png")}}" class="banner"/>
         </div>
         <div class="clearfix"></div>
     </header>
     <div class="container main">
         <div class="col-xs-2 left">
             {% for i in years %}
-            <div class="year-wrapper"><a href="/year/{{i}}" class="year {{'active' if i == current}}">{{i}}</a></div>
+            <div class="year-wrapper"><a href="{{url_for("show_index", year=i)}}" class="year {{'active' if i == current}}">{{i}}</a></div>
             {% endfor %}
         </div>
         <div class="col-xs-10 right">
@@ -38,9 +38,9 @@
             <div class="col-xs-6">
                 <div class="block">
                     <div class="date"><span class="month">{{p.published.month}}</span><span class="day">{{p.published.day}}</span></div>
-                    <a class="hover" href="/p/{{p.id}}"><span>{{p.title}}</span></a>
+                    <a class="hover" href="{{url_for("post", pid=p.id)}}"><span>{{p.title}}</span></a>
                     <div class="background">
-                        <img src="{{p.header}}">
+                        <img src="{base_url}}{{p.header}}">
                     </div>
                 </div>  
             </div>
@@ -48,7 +48,7 @@
             <div class="col-xs-12">
                 <div class="pages">
                     {% for i in pages%}
-                    <a href="/year/{{year}}?p={{cur_page}}" class="page {{"active" if i == cur_page}}">{{i}}</a>
+                    <a href="{{url_for("show_index", year=year)}}?p={{cur_page}}" class="page {{"active" if i == cur_page}}">{{i}}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -68,18 +68,18 @@
             <p class="grey"><a href="mailto:xwzx@uestc.edu.cn">xwzx@uestc.edu.cn</a></p>
             <div class="grey contact">
                 <a href="#" target="_blank">
-                    <img src="/static/img/footer-weixin.gif">
-                    <i class="qrcode"><img src="/static/img/erweima.jpg"></i>
+                    <img src="{{url_for("static",filename="img/footer-weixin.gif")}}">
+                    <i class="qrcode"><img src="{{url_for("static",filename="img/erweima.jpg")}}"></i>
                 </a>
                 <a href="http://weibo.com/u/3982954755" target="_blank">
-                    <img src="/static/img/footer-weibo.gif">
+                    <img src="{{url_for("static",filename="img/footer-weibo.gif")}}">
                 </a>
                 <a href="#" target="_blank">
-                    <img src="/static/img/footer-book.gif">
-                    <i class="qrcode book"><img src="/static/img/bookQR.jpg"></i>
+                    <img src="{{url_for("static",filename="img/footer-book.gif")}}">
+                    <i class="qrcode book"><img src="{{url_for("static",filename="img/bookQR.jpg")}}"></i>
                 </a>
                 <a href="#" target="_blank">
-                    <img src="/static/img/footer-rss.gif">
+                    <img src="{{url_for("static",filename="img/footer-rss.gif")}}">
                 </a>
             </div>
         </div>

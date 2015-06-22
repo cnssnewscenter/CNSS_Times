@@ -1,14 +1,47 @@
-from flask import Flask, jsonify
+from flask import Flask
 import os
 from datetime import timedelta
 from json import JSONEncoder
 from datetime import datetime
+from .config import DEBUG
 
 
-app = Flask(__name__)
+config = {
+    # "static_folder": "static",
+    # "static_url_path": "/static"
+}
+
+
+class ReservePoxied():
+
+    """
+    take from: http://flask.pocoo.org/snippets/35/
+    """
+
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        script_name = environ.get('HTTP_X_SCRIPT_NAME', '')
+        if script_name:
+            environ['SCRIPT_NAME'] = script_name
+            path_info = environ['PATH_INFO']
+            if path_info.startswith(script_name):
+                environ['PATH_INFO'] = path_info[len(script_name):]
+                print(environ['PATH_INFO'])
+        scheme = environ.get('HTTP_X_SCHEME', '')
+        if scheme:
+            environ['wsgi.url_scheme'] = scheme
+        return self.app(environ, start_response)
+
+
+app = Flask(__name__, **config)
 app.secret_key = os.urandom(20)
 app.permanent_session_lifetime = timedelta(days=1)
 app.config.from_pyfile("config.py")
+app.prefix = "http://www.new1.uestc.edu.cn/times/"
+app.wsgi_app = ReservePoxied(app.wsgi_app)
+
 
 class CustomJsonEncoder(JSONEncoder):
 

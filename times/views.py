@@ -26,7 +26,7 @@ def get_page_hit(page):
 def init_the_user():
     session.modified = True
     session.permanent = True
-    if request.path.startswith("/admin/api"):
+    if "admin/api" in request.path:
         username = session.get("username")
         if username:
             user = model.AdminUser.try_get(username=username)
@@ -36,6 +36,11 @@ def init_the_user():
                 return
     g.logined = False
     return
+
+
+@app.route("/admin/api")
+def api_plaeholder():
+    abort(403)
 
 
 def need_login(func):
@@ -137,6 +142,7 @@ def gen_file_name(filename):
 
 
 @app.route("/admin/upload", methods=["POST"])
+@need_login
 def upload_file():
     try:
         with model.db.transaction():
@@ -158,6 +164,7 @@ def upload_file():
 
 
 @app.route('/admin/api/uploaded', methods=["GET"])
+@need_login
 def uploaded_file():
     if request.method == "GET":
         page = int(request.args.get("page", 1))
@@ -176,6 +183,7 @@ def uploaded_file():
 
 
 @app.route("/admin/api/stats")
+@need_login
 def stats():
     code = request.args.get("id")
     if code:
@@ -187,6 +195,7 @@ def stats():
 
 
 @app.route('/admin/api/index_stats')
+@need_login
 def index_stats():
     posts = {
         "all": model.Post.select().where(model.Post.deleted == False).count(),
@@ -204,6 +213,7 @@ def index_stats():
 
 
 @app.route('/upload/<path:path>')
+@need_login
 def upload_static_file(path):
     return send_from_directory(app.config['UPLOAD'], path)
 
@@ -247,7 +257,7 @@ def show_index(year):
 
     current_year = current_year[8 * (page - 1):8*page + 1]
 
-    return render_template("index.html", posts=current_year, current_page=page, years=years, current=year, hit=hit, pages=pages, cur_page=page)
+    return render_template("index.html", base_url=app.prefix, posts=current_year, current_page=page, years=years, current=year, hit=hit, pages=pages, cur_page=page)
 
 
 @app.route('/p/<pid>')
@@ -261,7 +271,7 @@ def post(pid):
         prev_p = list(model.Post.select().where((model.Post.published < post.published) & (model.Post.deleted == False)).order_by(model.Post.published.desc()).limit(1))
         year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1) & (model.Post.published <= post.published.replace(month=12, day=31)))))
         year.remove(post)
-        return render_template('post.html', post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
+        return render_template('post.html', base_url=app.prefix, post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
 
 
 

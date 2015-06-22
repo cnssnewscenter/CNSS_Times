@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>Admin</title>
     <base href="/admin/">
-    <!-- buidl:js /static/dist/dependency.js -->
+    <script>
+    var baseUrl = "{{base_url}}"
+    </script>
+    <!-- build:js /static/dist/dependency.js -->
     <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/static/bower_components/angular/angular.min.js"></script>
     <script src="/static/bower_components/ui-router/release/angular-ui-router.min.js"></script>
@@ -27,6 +30,7 @@
     <!-- build:js /static/dist/app.js -->
     <script src="/static/src/js/app.js"></script>
     <!-- endbuild -->
+    <script src="{url_for('static', filename='dist/template.js')}"></script>
     <!-- build:css /static/dist/app.css -->
     <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css">

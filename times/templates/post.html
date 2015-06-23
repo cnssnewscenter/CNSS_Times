@@ -128,7 +128,7 @@
     </footer>
     <script>
         var request = new XMLHttpRequest();
-        request.open('GET', '/hit/post{{post.id}}');
+        request.open('GET', '{{url_for('Hit', page="post{}".format(post.id))}}');
         request.send();
     </script>
 </body>

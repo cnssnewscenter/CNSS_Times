@@ -5,11 +5,6 @@
     <title>成电时光</title>
     <link rel="stylesheet" href="{{url_for("static", filename="css/bootstrap.min.css")}}">
     <link rel="stylesheet" href="{{url_for("static", filename="css/index.css")}}"/>
-    <script>
-        var request = new XMLHttpRequest();
-        request.open('GET', '{{url_for("Hit", page="year{}".format(current))}}');
-        request.send();
-    </script>
 </head>
 <body class="index">
     <header>
@@ -84,5 +79,10 @@
             </div>
         </div>
     </footer>
+    <script>
+        var request = new XMLHttpRequest();
+        request.open('GET', '{{url_for("Hit", page="year{}".format(current))}}');
+        request.send();
+    </script>
 </body>
 </html>

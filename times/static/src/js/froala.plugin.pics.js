@@ -1,7 +1,7 @@
 (function($){
 	$.Editable.DEFAULTS = $.extend($.Editable.DEFAULTS, {
 		picsManager: true,
-		searchPath: "/admin/api/uploaded"
+		searchPath: baseurl+"admin/api/uploaded"
 	})
 	$.Editable.prototype.buildManager = function(){
 		var manager = this.manager = {
@@ -67,8 +67,8 @@
 			if(!response.err){
 				manager.images.empty();
 				response.data.forEach(function(pics){
-					if(/\.(?:gif|jpe?g|png)$/.test(pics.path)){
-						$("<img>").addClass("img-responsive thumbnail").attr("src", "/upload/"+pics.path).appendTo(manager.images)
+					if(/\.(?:gif|jpe?g|png)$/.test(pics.src)){
+						$("<img>").addClass("img-responsive thumbnail").attr("src", pics.path).appendTo(manager.images)
 					}
 				});
 				manager.modal.find(".current").text(manager.page);

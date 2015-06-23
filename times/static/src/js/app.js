@@ -246,9 +246,8 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             page = $scope.page
         Restangular.all('uploaded').getList({page: page, key: keyword}).then(function(response){
             $scope.pics = response.filter(function(pic){
-                return /\.(?:gif|jpe?g|png)$/.test(pic.path)
+                return /\.(?:gif|jpe?g|png)$/.test(pic.src)
             }).map(function(data){
-                data.path = "/upload/" + data.path;
                 $scope.page = page
                 return data
             })

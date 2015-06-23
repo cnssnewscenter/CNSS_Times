@@ -151,13 +151,13 @@ def upload_file():
             final_path = os.path.join(app.config.get("UPLOAD", ""), saved)
             os.makedirs(os.path.split(final_path)[0], exist_ok=True)
             request.files["file"].save(final_path)
-            model.Resource.create(
+            new_model = model.Resource.create(
                 filename=filename,
                 created=datetime.now(),
                 size=os.stat(os.path.join(app.config.get("UPLOAD"), saved)).st_size,
                 path=saved
             )
-            return jsonify(err=0, path=url_for('upload', path=saved))
+            return jsonify(err=0, path='{}f/{}'.format(app.prefix, new_model.id), fid=new_model.id)
     except Exception as e:
         app.logger.error("when uploading at {}".format(datetime.now()), exc_info=e)
         return jsonify(err=1, errmsg="There are some errors happened, plz contact the website manager")
@@ -166,6 +166,11 @@ def upload_file():
 @app.route('/admin/api/uploaded', methods=["GET"])
 @need_login
 def uploaded_file():
+    def replace_path(pic):
+        pic["src"] = pic['path']
+        pic['path'] = app.prefix + 'f/' + str(pic['id'])
+        return pic
+
     if request.method == "GET":
         page = int(request.args.get("page", 1))
         keyword = request.args.get('key', None)
@@ -174,12 +179,12 @@ def uploaded_file():
                 keyword = keyword.split()
                 ret = []
                 for i in keyword:
-                    ret.extend([i.to_dict() for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)])
+                    ret.extend([replace_path(i.to_dict()) for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)])
             else:
-                ret = [i.to_dict() for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)]
+                ret = [replace_path(i.to_dict()) for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)]
             return jsonify(err=0, data=ret)
         else:
-            return jsonify(err=0, data=[i.to_dict() for i in model.Resource.select().paginate(page, 30)])
+            return jsonify(err=0, data=[replace_path(i.to_dict()) for i in model.Resource.select().paginate(page, 30)])
 
 
 @app.route("/admin/api/stats")
@@ -210,12 +215,6 @@ def index_stats():
         "max": [i.to_dict() for i in model.Hit.select().order_by(model.Hit.hit).limit(3)]
     }
     return jsonify(err=0, posts=posts, resource=model.Resource.select().count(), hits=hits)
-
-
-@app.route('/upload/<path:path>')
-@need_login
-def upload_static_file(path):
-    return send_from_directory(app.config['UPLOAD'], path)
 
 
 @app.route('/hit/<page>')

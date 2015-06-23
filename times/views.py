@@ -268,7 +268,7 @@ def post(pid):
         hit = get_page_hit("post"+str(pid))
         next_p = list(model.Post.select().where((model.Post.published > post.published) & (model.Post.deleted == False)).order_by(model.Post.published).limit(1))
         prev_p = list(model.Post.select().where((model.Post.published < post.published) & (model.Post.deleted == False)).order_by(model.Post.published.desc()).limit(1))
-        year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1) & (model.Post.published <= post.published.replace(month=12, day=31)))))
+        year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1)) & ((model.Post.published <= post.published.replace(month=12, day=31)))))
         year.remove(post)
         return render_template('post.html', base_url=app.prefix, post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
 

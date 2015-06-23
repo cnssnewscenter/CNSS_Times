@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>成电时光</title>
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/bower_components/froala/css/froala_content.min.css">
-    <link rel="stylesheet" href="/static/css/index.css"/>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='bower_components/froala/css/froala_content.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}"/>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <style>
@@ -21,6 +21,9 @@
         width: 50%;
         padding: 10px;
     }
+    .post header {
+      background-image: url({{url_for('static',filename='img/bg_post.png')}});
+    }
     </style>
     
 </head>
@@ -28,7 +31,7 @@
 <body class="post">
     <header>
         <div class="container top">
-            <img src="/static/img/logo.png" class="pull-left"/>
+            <img src="{{url_for('static',filename='img/logo.png')}}" class="pull-left"/>
             <div class="pull-right">
                 <a href="http://www.uestc.edu.cn/">学校主页</a>
                 <a href="http://www.new1.uestc.edu.cn/">新闻中心</a>
@@ -41,7 +44,6 @@
         <div class="row" style='height: 320px'>
             <div class="col-xs-2 clearfix">
             <!-- whole year guide -->
-                
                 {{ date_block(post, 'self active')}}
                 <div style="margin: 10px -10px">
                     {% for i in category %}
@@ -53,9 +55,6 @@
                         {{more_block(post)}}
                     </div>
                 </div>
-
-                
-                
             </div>
             <div class="col-xs-10">
                 <div class="header" style="background-image:url({{post.header}})"> 
@@ -111,18 +110,18 @@
             <p class="grey"><a href="mailto:xwzx@uestc.edu.cn">xwzx@uestc.edu.cn</a></p>
             <div class="grey contact">
                 <a href="#" target="_blank">
-                    <img src="/static/img/footer-weixin.gif">
-                    <i class="qrcode"><img src="/static/img/erweima.jpg"></i>
+                    <img src="{{url_for('static',filename='img/footer-weixin.gif')}}">
+                    <i class="qrcode"><img src="{{url_for('static',filename='img/erweima.jpg')}}"></i>
                 </a>
                 <a href="http://weibo.com/u/3982954755" target="_blank">
-                    <img src="/static/img/footer-weibo.gif">
+                    <img src="{{url_for('static',filename='img/footer-weibo.gif')}}">
                 </a>
                 <a href="#" target="_blank">
-                    <img src="/static/img/footer-book.gif">
-                    <i class="qrcode book"><img src="/static/img/bookQR.jpg"></i>
+                    <img src="{{url_for('static',filename='img/footer-book.gif')}}">
+                    <i class="qrcode book"><img src="{{url_for('static',filename='img/bookQR.jpg')}}"></i>
                 </a>
                 <a href="#" target="_blank">
-                    <img src="/static/img/footer-rss.gif">
+                    <img src="{{url_for('static',filename='img/footer-rss.gif')}}">
                 </a>
             </div>
         </div>

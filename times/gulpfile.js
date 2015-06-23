@@ -12,12 +12,13 @@ var gulp = require('gulp'),
 
 
 gulp.task('template', function(){
-    gulp.src('src/html/*.html')
+    gulp.src('static/src/html/*.html')
         .pipe(templateCache({
             root: "/static/src/html/",
             module: "times"
         }))
-        .pipe(gulp.dest("."))
+        .pipe(debug())
+        .pipe(gulp.dest("static/"))
 })
 
 gulp.task('compile_admin', function(){

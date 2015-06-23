@@ -1,5 +1,5 @@
 from times import app
-from flask import render_template, jsonify, request, g, session, abort, send_file, send_from_directory
+from flask import render_template, jsonify, request, g, session, abort, send_file, send_from_directory, url_for
 from . import model
 from functools import wraps
 from datetime import datetime, timedelta
@@ -26,7 +26,7 @@ def get_page_hit(page):
 def init_the_user():
     session.modified = True
     session.permanent = True
-    if "admin/api" in request.path:
+    if "admin/api" in request.path or request.path.endswith("upload"):
         username = session.get("username")
         if username:
             user = model.AdminUser.try_get(username=username)
@@ -157,7 +157,7 @@ def upload_file():
                 size=os.stat(os.path.join(app.config.get("UPLOAD"), saved)).st_size,
                 path=saved
             )
-            return jsonify(err=0, path=os.path.join("/upload", saved))
+            return jsonify(err=0, path=url_for('upload', path=saved))
     except Exception as e:
         app.logger.error("when uploading at {}".format(datetime.now()), exc_info=e)
         return jsonify(err=1, errmsg="There are some errors happened, plz contact the website manager")
@@ -272,6 +272,15 @@ def post(pid):
         year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1) & (model.Post.published <= post.published.replace(month=12, day=31)))))
         year.remove(post)
         return render_template('post.html', base_url=app.prefix, post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
+
+
+@app.route('/f/<int:fid>')
+def get_file_by_id(fid):
+    data = model.Resource.try_get(id=fid)
+    if data:
+        return send_from_directory(app.config['UPLOAD'], data.path)
+    else:
+        abort(404)
 
 
 @app.route("/admin/", defaults={"path": None})

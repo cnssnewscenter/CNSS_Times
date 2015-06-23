@@ -1,4 +1,4 @@
-angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid', "ngToast", 'ui.bootstrap', 'ui.bootstrap.datetimepicker']).run(['Restangular', "$state",function(Restangular, $state){
+angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 'angularFileUpload', 'akoenig.deckgrid', "ngToast", 'ui.bootstrap', 'ui.bootstrap.datetimepicker']).run(['Restangular', "$state", "$rootScope",function(Restangular, $state, $rootScope){
     // config the Restangular baseurl
     Restangular.setBaseUrl(baseurl+"/admin/api")
     Restangular.setErrorInterceptor(function(response, defered, responseHandler){
@@ -22,7 +22,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             $state.go("login")
         }else{
             // check if we in the login page 
-            if(window.location.pathname == baseurl+'/admin/login' || window.location.pathname == baseurl+"/admin/"){
+            if(window.location.hash == '/login' || window.location.hash == ""){
                 // go to the dashboard
                 $state.go("main.dashboard")
             }
@@ -32,7 +32,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     ngToastProvider.configure({
         animation: 'slide' // or 'fade'
     });
-}]).config(['$stateProvider', "$locationProvider",function($stateProvider, $locationProvider) {
+}]).config(['$stateProvider', "$locationProvider", '$urlRouterProvider',function($stateProvider, $locationProvider, $urlRouterProvider) {
     $stateProvider.state("login", {
         url: "/login",
         templateUrl: "/static/src/html/login.html",
@@ -69,6 +69,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         url: "/resource",
         controller: "ResourceController"
     })
+    $urlRouterProvider.otherwise('/dashboard')
 }]).controller('LoginController', ['Restangular', "$scope", "$state", function(Restangular, $scope, $state){
     $scope.login = function(){
         if($scope.password && $scope.username){
@@ -99,7 +100,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     Restangular.all("logout").customGET().then(function(){
         $scope.status = '退出成功，即将回到首页'
         $timeout(function(){
-            window.location.href = '/';
+            window.location.href = baseurl;
         }, 1000)
     })
 }]).controller('PassagesController', ['Restangular', "$scope", "ngToast",function(Restangular, $scope, ngToast){
@@ -207,7 +208,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     $scope.setTitle("资源管理")
     $scope.page = 1
     $scope.uploader = new FileUploader({
-        url: baseurl+"/admin/upload",
+        url: baseurl+"admin/upload",
         autoUpload: true,
         removeAfterUpload: true,
     })
@@ -226,7 +227,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
 
 }]).controller('SelectorController', ['$scope', "FileUploader", "$modalInstance", 'Restangular',function($scope, FileUploader, $modalInstance, Restangular){
     $scope.uploader = new FileUploader({
-        url: baseurl+"/admin/upload",
+        url: baseurl+"admin/upload",
         autoUpload: true
     })
     $scope.finished = []

@@ -189,6 +189,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             return Restangular.all('post').customPUT($scope.passage).then(function(response){
                 console.log(response)
                 ngToast.create("保存成功")
+                $state.go('main.passages')
             }, function(){
                 ngToast.warning("保存失败")
             })
@@ -196,6 +197,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             return Restangular.one('post', $stateParams.id).customPOST($scope.passage).then(function(response){
                 console.log(response)
                 ngToast.create("保存成功")
+                $state.go('main.passages')
             }, function(response){
                 console.log(response)
                 ngToast.warning("保存失败")

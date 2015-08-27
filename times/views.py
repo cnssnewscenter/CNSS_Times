@@ -12,6 +12,12 @@ PAGEVIEW_CACHE = defaultdict(int)
 LAST_UPDATE = datetime.now()
 
 
+@app.template_filter("padding")
+def padding_date(s):
+    s = s if isinstance(s, str) else str(s)
+    return "{:0>2}".format(s)
+
+
 def get_page_hit(page):
     page_ = model.Hit.try_get(page=page)
     if page_:

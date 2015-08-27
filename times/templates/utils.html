@@ -4,8 +4,8 @@
             <div class="text-center">
                 <div class="text text-right">
                     <span class="year">{{post.published.year}}</span>
-                    <span class="month">{{"{:0>2}".format(post.published.month)}}</span>
-                    <span class="day">.{{"{:0>2}".format(post.published.day)}}</span>
+                    <span class="month">{{post.published.month|padding}}</span>
+                    <span class="day">.{{post.published.day|padding}}</span>
                 </div>
             </div>
         </a>

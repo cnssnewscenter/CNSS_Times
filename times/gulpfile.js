@@ -21,21 +21,6 @@ gulp.task('template', function(){
         .pipe(gulp.dest("static/"))
 })
 
-gulp.task('compile_admin', function(){
-    var asset = useref.assets({
-        searchPath: "."
-    })
-    gulp.src('templates/admin.html')
-        .pipe(asset)
-        .pipe(gulpif("*.css", minifyCss()))
-        .pipe(rev())
-        .pipe(asset.restore())
-        .pipe(useref())
-        .pipe(revReplace())
-        .pipe(debug({title: "output"}))
-        .pipe(gulp.dest("templates"))
-})
-
 gulp.task("clean", function(cb){
     del(["static/dist/"], cb)
 })
@@ -45,5 +30,5 @@ gulp.task('reorder', function(){
         .pipe(gulp.dest('static/dist/'))
 })
 
-gulp.task('default', ['clean', 'template', "compile_admin", 'reorder'])
+gulp.task('default', ['clean', 'template', 'reorder'])
 

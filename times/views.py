@@ -4,6 +4,7 @@ from . import model
 from functools import wraps
 from datetime import datetime, timedelta
 import os
+import json
 from dateutil.parser import parse
 import math
 from collections import defaultdict
@@ -84,6 +85,22 @@ def login_status():
 def logout():
     session.pop("username")
     return jsonify(err=0, msg="Token cleaned")
+
+
+@app.route("/admin/api/preview", methods=["POST"])
+@need_login
+def preview():
+    post = json.loads(request.form.get('data'))
+    print(post)
+    hit = 1234
+    post['published'] = parse(post['published']).replace(tzinfo=None)
+    next_p = list(model.Post.select().where((model.Post.published > post['published']) & (model.Post.deleted == False)).order_by(model.Post.published).limit(1))
+    prev_p = list(model.Post.select().where((model.Post.published < post['published']) & (model.Post.deleted == False)).order_by(model.Post.published.desc()).limit(1))
+    year = list(model.Post.select().where((model.Post.published >= post['published'].replace(month=1, day=1)) & ((model.Post.published <= post['published'].replace(month=12, day=31)))))
+    for i in year[:]:
+        if timedelta(days=-1) < i.published - post['published'] < timedelta(days=1):
+            year.remove(i)
+    return render_template('post.html', base_url=app.prefix, post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
 
 
 @app.route("/admin/api/post", methods=["GET", "PUT"], defaults={"pid": None})

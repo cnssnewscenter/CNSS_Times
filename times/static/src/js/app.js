@@ -16,6 +16,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         } 
         return data
     })
+    $rootScope.baseurl = baseurl
     Restangular.all("login").customGET().then(function(data){
         if(data.logined == false){
             console.log("You should login first")
@@ -144,6 +145,18 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             }
         })
         $scope.setTitle("编辑文章")
+
+    }
+
+    $scope.preview = function(){
+        var data = JSON.stringify($scope.passage)
+        window.open("", "Preview")
+        var form = angular.element('<form action="'+baseurl+"admin/api/preview" +'" method="POST" target="Preview"></form>')
+        form.append(angular.element("<input type=\"input\"/>").attr('name', "data").val(data))
+        form.appendTo(angular.element("div.forms.hidden")).submit()
+        setTimeout(function(){
+            form.remove()
+        }, 500)
 
     }
     

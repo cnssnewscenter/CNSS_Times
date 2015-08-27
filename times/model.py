@@ -1,4 +1,5 @@
-from peewee import Model, PostgresqlDatabase, TextField, CharField, DateTimeField, IntegerField, BooleanField, BigIntegerField
+from peewee import Model, PostgresqlDatabase, TextField, CharField,  IntegerField, BooleanField, BigIntegerField
+from peewee import DateTimeField as raw_datetimefield
 from .config import DEBUG
 import json
 from .utils import *
@@ -12,6 +13,16 @@ if DEBUG:
     logger.addHandler(logging.StreamHandler())
 else:
     db = PostgresqlDatabase('times', user="times")
+
+
+class DateTimeField(raw_datetimefield):
+
+    '''
+    remove the tzinfo when saving
+    '''
+
+    def db_value(self, value):
+        return super(DateTimeField, self).db_value(value.replace(tzinfo=None))
 
 
 class JsonField(TextField):

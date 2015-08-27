@@ -24,7 +24,9 @@
     "angular-deckgrid": "~0.5.0",
     "ngtoast": "~1.5.4",
     "angular-bootstrap": "~0.13.0",
-    "angular-bootstrap-datetimepicker": "~0.3.12"
+    "angular-bootstrap-datetimepicker": "~0.3.12",
+    "angular-foundation": "~0.6.0",
+    "bootstrap": "~3.3.5"
   },
   "resolutions": {
     "angular": "~1.4.0"

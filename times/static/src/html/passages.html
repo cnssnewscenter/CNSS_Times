@@ -23,7 +23,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="p in passages">
-						<td><a ng-href="/p/{{p.id}}" target="_blank">{{p.id}}</a></td>
+						<td><a ng-href="{{baseurl}}/p/{{p.id}}" target="_blank">{{p.id}}</a></td>
 						<td>{{p.creator}}</td>
 						<td class="{{p.status}}">
 							<select ng-model="p.status" ng-change="update_status(p)" class="form-control">
@@ -37,7 +37,7 @@
 						<td><time am-time-ago="p.created"></time></td>
 						<td>
 							<div class="btn-group">
-								<a ng-href="passage/{{p.id}}" class="btn btn-warning">编辑</a>
+								<a ng-href="#/passage/{{p.id}}" class="btn btn-warning">编辑</a>
 								<a ng-click="del(p)" class="btn btn-danger" ng-href="#">删除</a>
 							</div>
 						</td>

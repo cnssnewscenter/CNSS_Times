@@ -25,7 +25,7 @@
 		this.manager.images.on("click", function(event){
 			if(event.target.nodeName.toLowerCase() == 'img'){
 				this.writeImage($(event.target).attr("src"))
-				this.manager.modal.hide()
+				// this.manager.modal.hide()
 			}
 		}.bind(this))
 		this.manager.modal.hide()

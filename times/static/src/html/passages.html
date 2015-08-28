@@ -17,7 +17,8 @@
 						<td>状态</td>
 						<td>标题</td>
 						<td>题图</td>
-						<td>日期</td>
+						<td>显示日期</td>
+						<td>创建日期</td>
 						<td>操作</td>
 					</tr>
 				</thead>
@@ -34,6 +35,7 @@
 						</td>
 						<td>{{p.title}}</td>
 						<td style="width: 40%"><img ng-src="{{p.header}}" class="img-responsive thumbnail"></td>
+						<td><time am-time-ago="p.published"></time></td>
 						<td><time am-time-ago="p.created"></time></td>
 						<td>
 							<div class="btn-group">

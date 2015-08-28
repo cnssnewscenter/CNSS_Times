@@ -64,9 +64,9 @@
         <div class="row">
             <div class="col-xs-10 col-xs-offset-2">
                 <p class="info">{{post.published.year}}年{{post.published.month}}月首页故事</p>
+                <h2 class="text-center title">{{post.title}}</h2>
             </div>
             <div class="col-xs-offset-2 col-xs-8">
-                <h2 class="text-center title">{{post.title}}</h2>
                 <div class="content">
                     {{post.content | safe}}
                 </div>
@@ -75,14 +75,14 @@
                         {% if prev_p %}
                         <a href="{{prev_p[0].id}}">上一篇：{{prev_p[0].title}}</a>
                         {% else %}
-                        <a href="#">没有了</a>
+                        <!-- <a href="#">没有了</a> -->
                         {% endif %}
                     </div>
                     <div class="col-xs-6 text-right">
                         {% if next_p %}
                         <a href="{{next_p[0].id}}">下一篇：{{next_p[0].title}}</a>
                         {% else %}
-                        <a href="#">没有了</a>
+                        <!-- <a href="#">没有了</a> -->
                         {% endif %}
                     </div>
                 </div>

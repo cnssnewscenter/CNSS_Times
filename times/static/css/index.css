@@ -144,6 +144,10 @@ header .banner {
   background-color: #76b2d1;
   color: white;
 }
+.main .content {
+  margin-top: 40px;
+  line-height: 1.6;
+}
 .pages {
   padding: 3rem 0;
 }
@@ -247,7 +251,7 @@ footer img:hover + .qrcode.book img {
   min-height: 300px;
 }
 .post .title {
-  border-bottom: solid 2px #9a9a9a;
+  border-bottom: solid 1.5px #ddd;
   padding-bottom: 20px;
 }
 .post .job {
@@ -260,7 +264,7 @@ footer img:hover + .qrcode.book img {
   color: #9a9a9a;
 }
 .post .author-block:first-child {
-  margin-top: 73px;
+  margin-top: 30px;
 }
 .post .date-block-wrapper {
   position: relative;

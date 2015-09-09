@@ -1,6 +1,6 @@
 {% macro date_block(post, add_class='') -%}
     <div class="date-block-wrapper">
-        <a class="date-block {{add_class}}" href="/p/{{post.id}}">
+        <a class="date-block {{add_class}}" href="{{url_for("post", pid=post.id)}}">
             <div class="text-center">
                 <div class="text text-right">
                     <span class="year">{{post.published.year}}</span>
@@ -13,7 +13,7 @@
 {%- endmacro %}
 {% macro more_block(post) -%}
     <div class="date-block-wrapper">
-        <a class="date-block" href="/year/{{post.published.year}}">
+        <a class="date-block" href="{{url_for("show_index", year=post.published.year)}}">
             <div class="text-center">
                 <div class="text">
                     More

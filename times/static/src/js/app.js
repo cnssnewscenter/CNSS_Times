@@ -185,6 +185,10 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         $scope.author.splice($scope.author.indexOf(item), 1)
     }
     $scope.save = function(){
+        if ($scope.passage.published.getHours() == 16){
+            $scope.passage.published.setHours(24)
+            console.log($scope.passage.published)
+        }
         if($state.$current.name == "main.new_passages"){
             return Restangular.all('post').customPUT($scope.passage).then(function(response){
                 console.log(response)

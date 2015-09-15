@@ -7,7 +7,7 @@ header {
 }
 header .top {
   padding-top: 6rem;
-  padding-bottom: 10rem;
+  padding-bottom: 8rem;
 }
 header .top .pull-right {
   margin-top: 1.6rem;
@@ -45,7 +45,7 @@ header .top::after {
   clear: both;
 }
 header .banner {
-  border-width: 2rem 2rem 0;
+  border-width: 1rem 1rem 0;
   border-style: solid;
   border-color: white;
   width: 100%;
@@ -73,7 +73,7 @@ header .banner {
   text-align: center;
 }
 .index .left {
-  padding-top: 2rem;
+  padding-top: 36px;
 }
 .block {
   position: relative;
@@ -145,8 +145,11 @@ header .banner {
   color: white;
 }
 .main .content {
-  margin-top: 40px;
+  margin-top: 24px;
   line-height: 1.6;
+}
+.main .content p {
+  margin-bottom: 20px;
 }
 .pages {
   padding: 3rem 0;
@@ -177,11 +180,14 @@ footer {
   height: 230px;
   margin-top: 5rem;
   padding: 40px 0;
-  color: black;
 }
 footer a {
-  color: white;
+  color: #71a8ca;
   text-decoration: none;
+  transition: all 0.3s;
+}
+footer a:hover {
+  color: #4c92bc;
 }
 footer .address a:nth-of-type(n+2)::before {
   content: '|';
@@ -192,10 +198,10 @@ footer .contact {
   margin-right: 40px;
 }
 footer .grey {
-  color: #96bfd8;
+  color: #71a8ca;
 }
 footer .grey a {
-  color: #96bfd8;
+  color: #71a8ca;
 }
 footer .admin {
   color: #4c92bc;
@@ -261,7 +267,8 @@ footer img:hover + .qrcode.book img {
 .post .author-block {
   margin: 2em 0;
   line-height: 1;
-  color: #9a9a9a;
+  margin-left: 20px;
+  fcolor: #9a9a9a;
 }
 .post .author-block:first-child {
   margin-top: 30px;

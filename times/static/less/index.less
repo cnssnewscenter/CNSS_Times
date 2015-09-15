@@ -7,7 +7,7 @@ header{
 	background-size: cover;
 	.top{
 		padding-top: 6rem;
-		padding-bottom: 10rem;
+		padding-bottom: 8rem;
 		.pull-right{
 			margin-top: 1.6rem;
 			a{
@@ -45,7 +45,7 @@ header{
 		}
 	}
 	.banner{
-		border-width: 2rem 2rem 0;
+		border-width: 1rem 1rem 0;
 		border-style: solid;
 		border-color: white;
 		width: 100%;
@@ -74,7 +74,7 @@ header{
 		text-align: center;
 	}
 	.left{
-		padding-top: 2rem;
+		padding-top: 36px;
 	}
 }
 
@@ -153,8 +153,11 @@ header{
 	}
 }
 .main .content{
-	margin-top: 40px;
+	margin-top: 24px;
 	line-height: 1.6;
+	p{
+		margin-bottom: 20px;
+	}
 }
 .pages{
 	padding: 3rem 0;
@@ -184,11 +187,14 @@ footer{
 	height: 230px;
 	margin-top: 5rem;
 	padding: 40px 0;
-	color: black;
 }
 footer a {
-  color: white;
+  color: darken(#96bfd8, 10%);
   text-decoration: none;
+  transition: all 0.3s;
+  &:hover{
+  	color: darken(#96bfd8, 20%);
+  }
 }
 footer .address a:nth-of-type(n+2)::before {
   content: '|';
@@ -199,10 +205,10 @@ footer .contact {
   margin-right: 40px;
 }
 footer .grey {
-  color: #96bfd8;
+  color: darken(#96bfd8, 10%);
 }
 footer .grey a {
-  color: #96bfd8;
+  color: darken(#96bfd8, 10%);
 }
 footer .admin {
   color: #4c92bc;
@@ -272,6 +278,7 @@ footer img:hover + .qrcode.book img {
 	.author-block{
 		margin: 2em 0;
 		line-height: 1;
+		margin-left: 20px;f
 		color: #9a9a9a;
 	}
 	.author-block:first-child{

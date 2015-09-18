@@ -12,7 +12,7 @@ if DEBUG:
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
 else:
-    db = PostgresqlDatabase('times', user="times")
+    db = PostgresqlDatabase('times', user="SpecialTopic")
 
 
 class DateTimeField(raw_datetimefield):

@@ -97,3 +97,4 @@ npm-debug.log
 bower_components/
 test_db.sqlite3
 upload/
+deploy.sh

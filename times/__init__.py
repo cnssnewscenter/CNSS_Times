@@ -40,7 +40,7 @@ app.permanent_session_lifetime = timedelta(days=1)
 app.config.from_pyfile("config.py")
 app.prefix = "http://www.new1.uestc.edu.cn/times/"
 app.wsgi_app = ReservePoxied(app.wsgi_app)
-
+app.use_x_sendfile = True
 
 class CustomJsonEncoder(JSONEncoder):
 
@@ -56,6 +56,21 @@ class CustomJsonEncoder(JSONEncoder):
         return JSONEncoder.default(self, obj)
 
 app.json_encoder = CustomJsonEncoder
+
+__folder__ = os.path.dirname(__file__)
+__static__ = os.path.normpath(os.path.join(__folder__, "static"))
+__upload__ = os.path.normpath(os.path.join(__folder__, "../upload"))
+
+@app.after_request
+def change_url(response):
+    path = response.headers.get('X-Sendfile')
+    if path:
+        if "times/static" in path:
+            response.headers["X-Accel-Redirect"] = os.path.join("/times/static/", os.path.relpath(path, __static__))
+        elif "upload/" in path:
+            response.headers["X-Accel-Redirect"] = os.path.join("/uploaded_file/", os.path.relpath(path, __upload__))
+        # response.headers["X-Sendfile"] = None
+    return response
 
 from . import model
 

@@ -38,7 +38,7 @@ app = Flask(__name__, **config)
 app.secret_key = os.urandom(20)
 app.permanent_session_lifetime = timedelta(days=1)
 app.config.from_pyfile("config.py")
-app.prefix = "http://www.new1.uestc.edu.cn/times/"
+app.prefix = "/times/"
 app.wsgi_app = ReservePoxied(app.wsgi_app)
 app.use_x_sendfile = True
 

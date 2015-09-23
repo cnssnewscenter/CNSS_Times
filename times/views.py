@@ -115,6 +115,9 @@ def posts(pid):
             try:
                 data = request.get_json()
                 now = datetime.now()
+                date = parse(data['published']).replace(tzinfo=None)
+                if date.hour == 16:
+                    date += timedelta(hours=8)
                 model.Post.create(
                     title=data['title'],
                     content=data["content"],
@@ -123,7 +126,7 @@ def posts(pid):
                     created=now,
                     creator=g.user.username,
                     other={},
-                    published=parse(data['published']).replace(tzinfo=None),
+                    published=date,
                     operation_history=["created at {} by {}".format(now, g.user.username)],
                     status="toView"
                 )
@@ -148,7 +151,12 @@ def posts(pid):
                 post.header = data['header']
                 post.author = data["author"]
                 post.other = data['other']
-                post.published = parse(data['published']).replace(tzinfo=None)
+                date = parse(data['published']).replace(tzinfo=None)
+                print(date)
+                if date.hour == 16:
+                    date += timedelta(hours=8)
+                print(date)
+                post.published = date
                 post.operation_history.append("modified at {} by {}".format(datetime.now(), g.user.username))
                 status = data.get('status')
                 post.deleted = False

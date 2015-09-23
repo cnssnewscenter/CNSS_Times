@@ -143,7 +143,6 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
     }
 }]).controller('NewPassageController', ["$state", 'Restangular', "$scope", '$modal', "ngToast", "$stateParams", function($state, Restangular, $scope, $modal, ngToast, $stateParams){
     $scope.opened = false;
-    State = $state
     $scope.today = (new　Date()).toISOString().split("T")[0]
     if($state.$current.name == "main.new_passages"){
         $scope.passage = {}
@@ -186,7 +185,6 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         imageUploadURL: baseurl+'/admin/upload',
         buttons: ["bold", "italic", "underline", "strikeThrough", "fontSize", "fontFamily", "color", "sep", "formatBlock", "blockStyle", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent", "sep", "createLink", "insertImage", "insertVideo", "insertHorizontalRule", "undo", "redo", "html", "picManager"]
     }
-    $scope.author = []
     $scope.add = function(){
         if($scope.name && $scope.job){
             if(!$scope.passage.author){
@@ -201,9 +199,13 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         $scope.author.splice($scope.author.indexOf(item), 1)
     }
     $scope.save = function(){
+        console.log($scope.passage.published)
         if ($scope.passage.published.getHours() == 16){
             $scope.passage.published.setHours(24)
             console.log($scope.passage.published)
+        }
+        if(!$scope.passage.author){
+            $scope.passage.author = []
         }
         if($state.$current.name == "main.new_passages"){
             return Restangular.all('post').customPUT($scope.passage).then(function(response){

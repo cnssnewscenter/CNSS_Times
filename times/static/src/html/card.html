@@ -2,4 +2,5 @@
     <img ng-src="../f/{{card.id}}" class="img-responsive thumbnail">
 	<a href="../f/{{card.id}}"><p>{{card.filename}}</p></a>
     <p>{{card.size/1024/1024|number: 2}} MB</p>
+    <p>{{card.created|date: "medium"}} MB</p>
 </div>

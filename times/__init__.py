@@ -40,7 +40,7 @@ app.permanent_session_lifetime = timedelta(days=1)
 app.config.from_pyfile("config.py")
 app.prefix = "/times/"
 app.wsgi_app = ReservePoxied(app.wsgi_app)
-app.use_x_sendfile = True
+app.use_x_sendfile = not app.config['DEBUG']
 
 class CustomJsonEncoder(JSONEncoder):
 

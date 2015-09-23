@@ -7,7 +7,14 @@
 	</div>
 
 	<div class="panel panel-default">
-		<div class="panel-heading">文章</div>
+		<div class="panel-heading">
+		<div class="nav">
+			<span style="line-height: 34px;">
+				文章
+			</span>
+			<div class="pull-right"><div class="btn btn-default" ng-click="prev()">上一页</div> 第{{page}}页<div class="btn btn-default" ng-click="next()">下一页</div></div>
+		</div>
+		</div>
 		<div class="panel-body">
 			<table class="table">
 				<thead>
@@ -28,7 +35,7 @@
 						<td>{{p.creator}}</td>
 						<td class="{{p.status}}">
 							<select ng-model="p.status" ng-change="update_status(p)" class="form-control">
-								<option value="toView">待审</option>	
+								<option value="toView">待审</option>
 								<option value="toPublish">待发布</option>
 								<option value="published">已发布</option>
 							</select>

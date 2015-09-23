@@ -45,16 +45,31 @@
                 	<div class="progress" style="">
                         <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
                     </div>
-                    
+
                 </div>
             </div>
-        </div>                
+        </div>
     </div>
-    <div class="col-sm-12">	
+    <div class="col-xs-12 text-center">
+        <ul class="pagination">
+          <li>
+            <a ng-click="get(page - 1)" aria-label="Previous">
+              <span aria-hidden="true" >&laquo;</span>
+            </a>
+          </li>
+          <li><a href="#">{{page}}</a></li>
+          <li>
+            <a ng-click="get(page + 1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+    </div>
+    <div class="col-sm-12">
     	<!-- 使用瀑布流 -->
     	<div deckgrid source="resource" cardTemplate="/static/src/html/card.html" class="deckgrid"></div>
 	</div>
-    <div class="col-xs-12 text-center"> 
+    <div class="col-xs-12 text-center">
         <ul class="pagination">
           <li>
             <a ng-click="get(page - 1)" aria-label="Previous">

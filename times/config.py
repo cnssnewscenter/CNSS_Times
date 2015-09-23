@@ -1,4 +1,4 @@
 import os
 
-DEBUG = False
+DEBUG = True
 UPLOAD = os.path.abspath('./upload')

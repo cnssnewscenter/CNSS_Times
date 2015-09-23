@@ -110,7 +110,7 @@ def posts(pid):
     if pid is None:
         if request.method == "GET":
             page = int(request.args.get("page", 1))
-            return jsonify(err=0, data=[i.to_dict() for i in model.Post.select().where(model.Post.deleted == False).paginate(page, 10)])
+            return jsonify(err=0, data=[i.to_dict() for i in model.Post.select().where(model.Post.deleted == False).order_by(model.Post.published.desc()).paginate(page, 10)])
         elif request.method == "PUT":
             try:
                 data = request.get_json()
@@ -259,7 +259,7 @@ def show_index(year):
     global PAGEVIEW_CACHE
     page = int(request.args.get('p', 1))
     year = int(year) if year else datetime.now().year
-    posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published'))
+    posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published')).order_by(model.Post.published.desc())
     hit = get_page_hit("year" + str(year))
     current_year = []
     years = []
@@ -291,7 +291,7 @@ def post(pid):
         hit = get_page_hit("post"+str(pid))
         next_p = list(model.Post.select().where((model.Post.published > post.published) & (model.Post.deleted == False)).order_by(model.Post.published).limit(1))
         prev_p = list(model.Post.select().where((model.Post.published < post.published) & (model.Post.deleted == False)).order_by(model.Post.published.desc()).limit(1))
-        year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1)) & ((model.Post.published <= post.published.replace(month=12, day=31)))))
+        year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1)) & ((model.Post.published <= post.published.replace(month=12, day=31)))).order_by(model.Post.published.desc()))
         year.remove(post)
         return render_template('post.html', base_url=app.prefix, post=post, category=year, prev_p=prev_p, next_p=next_p, hit=hit)
 

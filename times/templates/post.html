@@ -24,8 +24,16 @@
     .post header {
       background-image: url({{url_for('static',filename='img/bg_post.png')}});
     }
+    .noclearfix::after{
+        clear: none !important;
+        display: block;
+    }
+    .nopreclear::before{
+        clear: none !important;
+        display: block;
+    }
     </style>
-    
+
 </head>
 
 <body class="post">
@@ -35,14 +43,14 @@
             <div class="pull-right">
                 <a href="http://www.uestc.edu.cn/">学校主页</a>
                 <a href="http://www.new1.uestc.edu.cn/">新闻中心</a>
-                <a href="http://www.new1.uestc.edu.cn/times">沉淀时光</a>
+                <a href="/times/">沉淀时光</a>
                 <input type="text" placeholder="搜索" class="search"/>
             </div>
         </div>
     </header>
-    <div class="container main">
-        <div class="row" style='height: 320px'>
-            <div class="col-xs-2 clearfix">
+    <div class="container main" style="position: relative">
+        <div style='position: absolute; z-index:-1; width: 100%'>
+            <div class="col-xs-2 noclearfix">
             <!-- whole year guide -->
                 {{ date_block(post, 'self active')}}
                 <div style="margin: 10px -10px">
@@ -56,12 +64,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-10">
-                <div class="header" style="background-image:url({{post.header}})"> 
+
+        </div>
+        <div class="">
+            <div class="col-xs-10 col-xs-offset-2">
+                <div class="header" style="background-image:url({{post.header}});margin-bottom: 1em">
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-xs-10 col-xs-offset-2">
                 <p class="info">{{post.published.year}}年{{post.published.month}}月首页故事</p>
                 <h2 class="text-left title">{{post.title}}</h2>

@@ -8,7 +8,8 @@ var gulp = require('gulp'),
     rev = require("gulp-rev"),
     debug = require("gulp-debug"),
     revReplace = require("gulp-rev-replace"),
-    del =  require("del")
+    del =  require("del"),
+    less = require('gulp-less')
 
 
 gulp.task('template', function(){
@@ -30,5 +31,19 @@ gulp.task('reorder', function(){
         .pipe(gulp.dest('static/dist/'))
 })
 
-gulp.task('default', ['clean', 'template', 'reorder'])
+gulp.task('css', function(){
+    gulp.src('static/less/index.less')
+        .pipe(less())
+        .pipe(minifyCss())
+        .pipe(gulp.dest('static/css/'))
+})
+
+gulp.task('admin_css', function(){
+    gulp.src('static/src/less/admin.less')
+        .pipe(less())
+        .pipe(minifyCss())
+        .pipe(gulp.dest('static/src/css/'))
+})
+
+gulp.task('default', ['clean', 'template', 'reorder', 'admin_css', 'css'])
 

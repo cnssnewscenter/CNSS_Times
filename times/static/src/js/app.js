@@ -13,7 +13,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             if (!data.err){
                 return data.data
             }
-        } 
+        }
         return data
     })
     $rootScope.baseurl = baseurl
@@ -22,7 +22,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             console.log("You should login first")
             $state.go("login")
         }else{
-            // check if we in the login page 
+            // check if we in the login page
             if(window.location.hash == '/login' || window.location.hash == ""){
                 // go to the dashboard
                 $state.go("main.dashboard")
@@ -55,8 +55,11 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         controller: "DashboardController"
     }).state("main.passages", {
         templateUrl: "/static/src/html/passages.html",
-        url: "/passages",
-        controller: "PassagesController"
+        url: "/passages?page",
+        controller: "PassagesController",
+        params: {
+            page: "1"
+        }
     }).state("main.passage", {
         templateUrl: "/static/src/html/new_passages.html",
         url: "/passage/:id",
@@ -104,19 +107,32 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
             window.location.href = baseurl;
         }, 1000)
     })
-}]).controller('PassagesController', ['Restangular', "$scope", "ngToast",function(Restangular, $scope, ngToast){
+}]).controller('PassagesController', ['Restangular', "$scope", "ngToast", "$stateParams", function(Restangular, $scope, ngToast, $stateParams){
     $scope.setTitle("文章列表")
+    $scope.page = $stateParams.page ? parseInt($stateParams.page) : 1;
     $scope.fresh = function(){
-        Restangular.all("post").getList().then(function(response){
+        Restangular.all("post").getList({page: $scope.page}).then(function(response){
             $scope.passages = response
         })
     }
     $scope.fresh()
+    $scope.next = function(){
+        $scope.page ++ ;
+        $stateParams.page ++;
+        $scope.fresh()
+    }
+    $scope.prev = function(){
+        if ($scope.page>1){
+            $scope.page -- ;
+            $stateParams.page --;
+            $scope.fresh()
+        }
+    }
     $scope.del = function(post){
         if(confirm('确认要删除吗')){
            Restangular.one('post', post.id).remove().then(function(){
                $scope.fresh()
-           }) 
+           })
         }
     }
     $scope.update_status = function(p){
@@ -159,7 +175,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         }, 500)
 
     }
-    
+
     $scope.froalaOptions = {
         inlineMode: false,
         placeholder: "开始编辑吧",
@@ -207,7 +223,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
                 ngToast.warning("保存失败")
             }) // save the change
         }
-        
+
     }
     $scope.upload = function(){
         console.log("Test")

@@ -39,7 +39,7 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         templateUrl: "/static/src/html/login.html",
         controller: "LoginController",
     }).state("logout", {
-        template: "{{status}}",
+        template: '<span class="logout">{{status}}</span>',
         url: "/logout",
         controller: "LogoutController"
     }).state("main", {
@@ -99,7 +99,6 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
         }
     })
 }]).controller('LogoutController', ['Restangular' , '$scope', '$timeout', function(Restangular, $scope, $timeout){
-    $scope.setTitle('退出登录')
     $scope.status = '正在退出登录'
     Restangular.all("logout").customGET().then(function(){
         $scope.status = '退出成功，即将回到首页'

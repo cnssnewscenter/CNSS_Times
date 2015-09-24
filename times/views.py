@@ -210,12 +210,12 @@ def uploaded_file():
                 keyword = keyword.split()
                 ret = []
                 for i in keyword:
-                    ret.extend([replace_path(i.to_dict()) for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)])
+                    ret.extend([replace_path(i.to_dict()) for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).order_by(model.Resource.created.desc()).paginate(page, 30)])
             else:
-                ret = [replace_path(i.to_dict()) for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).paginate(page, 30)]
+                ret = [replace_path(i.to_dict()) for i in model.Resource.select().where(model.Resource.filename.contains(keyword)).order_by(model.Resource.created.desc()).paginate(page, 30)]
             return jsonify(err=0, data=ret)
         else:
-            return jsonify(err=0, data=[replace_path(i.to_dict()) for i in model.Resource.select().paginate(page, 30)])
+            return jsonify(err=0, data=[replace_path(i.to_dict()) for i in model.Resource.select().order_by(model.Resource.created.desc()).paginate(page, 30)])
 
 
 @app.route("/admin/api/stats")

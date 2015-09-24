@@ -302,8 +302,6 @@ angular.module('times', ["ui.router", 'restangular', 'angularMoment', 'froala', 
 }]).filter("status", function(){
     return function(input){
         switch(input){
-            case "toView":
-                return "等待审阅";
             case "toPublish":
                 return "等待发布";
             case "published":

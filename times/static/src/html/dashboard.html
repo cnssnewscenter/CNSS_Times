@@ -6,7 +6,6 @@
 					<a ui-sref="main.passages"><span class="h1">{{data.posts.all}}</span> 篇文章</a>
 				</div>
 				<ul class="right">
-					<li><a ui-sref="main.passages">待审阅: {{data.posts.toView}}</a></li>
 					<li><a ui-sref="main.passages">待发布: {{data.posts.toPublish}}</a></li>
 					<li><a ui-sref="main.passages">已发布: {{data.posts.published}}</a></li>
 				</ul>
@@ -28,7 +27,7 @@
 				</div>
 				<ul class="right">
 					<li>前三排名</li>
-					<li ng-repeat="page in main.hits.max">{{page.page}}:{{page.hit}}</li>
+					<li ng-repeat="page in data.hits.max"><a href="{{baseurl+page.page}}">{{page.page}}-{{page.hit}}</a></li>
 				</ul>
 			</div>
 		</div>

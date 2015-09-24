@@ -3,7 +3,7 @@ import os
 from datetime import timedelta
 from json import JSONEncoder
 from datetime import datetime
-from .config import DEBUG
+import logging
 
 
 config = {
@@ -41,6 +41,11 @@ app.config.from_pyfile("config.py")
 app.prefix = "/times/"
 app.wsgi_app = ReservePoxied(app.wsgi_app)
 app.use_x_sendfile = not app.config['DEBUG']
+if not app.debug:
+    app.logger.setLevel(logging.INFO)
+    app.logger.addHandler(logging.StreamHandler())
+    app.logger.info("Start Times Web Server Logging")
+
 
 class CustomJsonEncoder(JSONEncoder):
 

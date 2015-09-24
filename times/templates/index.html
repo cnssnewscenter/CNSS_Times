@@ -81,7 +81,7 @@
     </footer>
     <script>
         var request = new XMLHttpRequest();
-        request.open('GET', '{{url_for("Hit", page="year{}".format(current))}}');
+        request.open('GET', '{{url_for("Hit", page="year/{}".format(current))}}');
         request.send();
     </script>
 </body>

@@ -26,7 +26,7 @@ def get_page_hit(page):
     else:
         hit = model.Hit.create(page=page, hit=PAGEVIEW_CACHE[page])
         PAGEVIEW_CACHE[page] = 0
-        return 0 + hit.hit
+        return hit.hit
 
 
 @app.before_request
@@ -44,10 +44,6 @@ def init_the_user():
     g.logined = False
     return
 
-
-@app.route("/admin/api")
-def api_plaeholder():
-    abort(403)
 
 
 def need_login(func):
@@ -128,7 +124,7 @@ def posts(pid):
                     other={},
                     published=date,
                     operation_history=["created at {} by {}".format(now, g.user.username)],
-                    status="toView"
+                    status="toPublish"
                 )
             except IndexError:
                 abort(400)
@@ -235,20 +231,19 @@ def stats():
 def index_stats():
     posts = {
         "all": model.Post.select().where(model.Post.deleted == False).count(),
-        "toView": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'toView')).count(),
         "toPublish": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'toPublish')).count(),
         "published": model.Post.select().where((model.Post.deleted == False) & (model.Post.status == "published")).count()
     }
-    index = model.Hit.try_get(page="index")
-    hit = index.hit if index else 0
+    now = datetime.now()
+    index = get_page_hit(page="year/{}".format(now.year))
     hits = {
-        "index": hit,
-        "max": [i.to_dict() for i in model.Hit.select().order_by(model.Hit.hit).limit(3)]
+        "index": index,
+        "max": [{"page": i.page, "hit": i.hit+PAGEVIEW_CACHE[i.page]} for i in model.Hit.select().order_by(model.Hit.hit.desc()).limit(3)]
     }
     return jsonify(err=0, posts=posts, resource=model.Resource.select().count(), hits=hits)
 
 
-@app.route('/hit/<page>')
+@app.route('/hit/<path:page>')
 def Hit(page):
     global PAGEVIEW_CACHE
     PAGEVIEW_CACHE[page] += 1
@@ -268,7 +263,7 @@ def show_index(year):
     page = int(request.args.get('p', 1))
     year = int(year) if year else datetime.now().year
     posts = model.Post.select().where((model.Post.deleted == False) & (model.Post.status == 'published')).order_by(model.Post.published.desc())
-    hit = get_page_hit("year" + str(year))
+    hit = get_page_hit("year/" + str(year))
     current_year = []
     years = []
     for i in posts:
@@ -296,7 +291,7 @@ def post(pid):
     if not post or post.deleted:
         abort(404)
     else:
-        hit = get_page_hit("post"+str(pid))
+        hit = get_page_hit("post/"+str(pid))
         next_p = list(model.Post.select().where((model.Post.published > post.published) & (model.Post.deleted == False)).order_by(model.Post.published).limit(1))
         prev_p = list(model.Post.select().where((model.Post.published < post.published) & (model.Post.deleted == False)).order_by(model.Post.published.desc()).limit(1))
         year = list(model.Post.select().where((model.Post.published >= post.published.replace(month=1, day=1)) & ((model.Post.published <= post.published.replace(month=12, day=31)))).order_by(model.Post.published.desc()))

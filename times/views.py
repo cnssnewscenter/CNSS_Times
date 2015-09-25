@@ -273,7 +273,7 @@ def show_index(year):
             if i.published.year not in years:
                 years.append(i.published.year)
     years = sorted(years + [year], reverse=True)
-    current_year = list(sorted(current_year, key=lambda x: x.published))
+    current_year = list(sorted(current_year, key=lambda x: x.published, reverse=True))
     length = len(current_year)
     pages = range(1, math.ceil(length / 8) + 1)
 
